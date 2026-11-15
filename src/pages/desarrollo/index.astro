@@ -1,0 +1,24 @@
+---
+import Base from '@/layouts/Base.astro';
+import AreaListing from '@/components/AreaListing.astro';
+import { porArea } from '@/lib/proyectos';
+
+const proyectos = await porArea('desarrollo');
+---
+
+<Base title="Desarrollo de software" description="Experiencia en prácticas (CÜIMO, ATISA), trabajo para Piscinas Fama, el proyecto final de DAM y herramientas propias como WebTrustScan.">
+  <div class="container page">
+    <header class="prose">
+      <p class="eyebrow">Experiencia y proyectos</p>
+      <h1>Desarrollo de software</h1>
+      <p class="lead">
+        Experiencia en empresas y proyectos propios. En los trabajos profesionales solo describo mis tareas: el código pertenece a cada empresa y no se publica.
+      </p>
+    </header>
+    <AreaListing proyectos={proyectos} />
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: var(--space-12); }
+</style>

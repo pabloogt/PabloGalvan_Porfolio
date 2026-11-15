@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="380" viewBox="0 0 900 380" font-family="Segoe UI, Arial, sans-serif" font-size="14">
+  <rect width="900" height="380" fill="#ffffff"/>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="#444"/></marker></defs>
+  <text x="20" y="30" font-size="16" font-weight="700" fill="#1b1d21">Laboratorio pfSense · Suricata · Wazuh (diagrama reconstruido)</text>
+  <rect x="20" y="150" width="130" height="70" rx="8" fill="#f0f0ec" stroke="#8a8f98"/>
+  <text x="85" y="182" text-anchor="middle" font-weight="700" fill="#1b1d21">WAN</text>
+  <text x="85" y="203" text-anchor="middle" fill="#565b64">NAT VirtualBox</text>
+  <rect x="200" y="125" width="170" height="120" rx="8" fill="#e2eff2" stroke="#0b5d74" stroke-width="2"/>
+  <text x="285" y="155" text-anchor="middle" font-weight="700" fill="#08465a">pfSense</text>
+  <text x="285" y="179" text-anchor="middle" fill="#1b1d21">LAN 192.168.50.1/24</text>
+  <text x="285" y="201" text-anchor="middle" fill="#1b1d21">DHCP .10 – .100</text>
+  <text x="285" y="223" text-anchor="middle" fill="#565b64">reglas pass / block</text>
+  <line x1="150" y1="185" x2="198" y2="185" stroke="#444" stroke-width="2"/>
+  <rect x="420" y="50" width="460" height="300" rx="8" fill="none" stroke="#c2410c" stroke-dasharray="6 4"/>
+  <text x="650" y="74" text-anchor="middle" font-weight="700" fill="#c2410c">Red interna LAN 192.168.50.0/24</text>
+  <rect x="440" y="95" width="200" height="100" rx="8" fill="#f0f0ec" stroke="#8a8f98"/>
+  <text x="540" y="122" text-anchor="middle" font-weight="700" fill="#1b1d21">Ubuntu · Suricata</text>
+  <text x="540" y="145" text-anchor="middle" fill="#1b1d21">192.168.50.11 · enp0s3</text>
+  <text x="540" y="168" text-anchor="middle" fill="#565b64">wazuh-agent 4.14</text>
+  <rect x="665" y="95" width="200" height="100" rx="8" fill="#f0f0ec" stroke="#8a8f98"/>
+  <text x="765" y="122" text-anchor="middle" font-weight="700" fill="#1b1d21">Ubuntu · Wazuh</text>
+  <text x="765" y="145" text-anchor="middle" fill="#1b1d21">192.168.50.12</text>
+  <text x="765" y="168" text-anchor="middle" fill="#565b64">manager + dashboard</text>
+  <line x1="640" y1="145" x2="662" y2="145" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+  <text x="652" y="218" text-anchor="middle" fill="#565b64" font-size="12">agente → manager (1514/tcp)</text>
+  <rect x="440" y="240" width="200" height="90" rx="8" fill="#f0f0ec" stroke="#8a8f98"/>
+  <text x="540" y="268" text-anchor="middle" font-weight="700" fill="#1b1d21">Ubuntu · pruebas</text>
+  <text x="540" y="291" text-anchor="middle" fill="#565b64">nmap -sS hacia .11</text>
+  <text x="540" y="312" text-anchor="middle" fill="#565b64">(DVWA solo planteado)</text>
+  <line x1="540" y1="238" x2="540" y2="198" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="370" y1="185" x2="418" y2="185" stroke="#444" stroke-width="2"/>
+  <text x="20" y="368" fill="#565b64" font-size="12">Direccionamiento tomado del informe y de las capturas. Las IPs son de laboratorio (privadas).</text>
+</svg>

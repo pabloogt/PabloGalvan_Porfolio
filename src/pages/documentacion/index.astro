@@ -1,0 +1,96 @@
+---
+import Base from '@/layouts/Base.astro';
+import EstadoBadge from '@/components/EstadoBadge.astro';
+import { Image } from 'astro:assets';
+import { todos, urlProyecto } from '@/lib/proyectos';
+
+const lista = await todos();
+const informes = lista.flatMap((p) => p.data.documentos.map((d) => ({ ...d, proyecto: p })));
+const diagramas = lista.flatMap((p) => p.data.evidencias.filter((e) => e.tipo !== 'captura').map((e) => ({ ...e, proyecto: p })));
+const capturas = lista
+  .map((p) => ({ proyecto: p, n: p.data.evidencias.filter((e) => e.tipo === 'captura').length }))
+  .filter((x) => x.n > 0);
+const pendientes = lista.filter((p) => p.data.pendiente.length > 0);
+---
+
+<Base title="Documentación técnica" description="Informes técnicos saneados, diagramas, evidencias y estado de la documentación de cada proyecto del portfolio.">
+  <div class="container page">
+    <header class="prose">
+      <p class="eyebrow">Biblioteca</p>
+      <h1>Documentación técnica</h1>
+      <p class="lead">Informes originales en versión saneada, diagramas y capturas. Todo se genera a partir de las fichas de proyecto, así que esta página siempre está al día.</p>
+      <p class="muted small">
+        Antes de publicar cada documento se han retirado contraseñas, claves, nombres de terceros y metadatos. Las direcciones IP que aparecen son privadas de laboratorio.
+      </p>
+    </header>
+
+    <section aria-labelledby="inf">
+      <h2 id="inf">Informes técnicos</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">Documento</th><th scope="col">Proyecto</th><th scope="col">Estado</th></tr></thead>
+          <tbody>
+            {
+              informes.map((d) => (
+                <tr>
+                  <td><a href={d.href}>{d.titulo}</a> <span class="muted">({d.formato})</span>{d.nota && <div class="muted small">{d.nota}</div>}</td>
+                  <td><a href={urlProyecto(d.proyecto)}>{d.proyecto.data.titulo}</a></td>
+                  <td><EstadoBadge estado={d.proyecto.data.estado} /></td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="diag">
+      <h2 id="diag">Diagramas</h2>
+      <div class="grid grid-cards">
+        {
+          diagramas.map((e) => (
+            <figure class="card fig">
+              <a href={urlProyecto(e.proyecto)}>
+                <Image src={e.imagen} alt={e.alt} width={600} format={e.imagen.format === 'svg' ? 'svg' : 'webp'} loading="lazy" />
+              </a>
+              <figcaption class="small">
+                <strong>{e.tipo === 'diagrama' ? 'Reconstruido' : 'Original'}</strong> · {e.proyecto.data.titulo}
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </section>
+
+    <section aria-labelledby="cap">
+      <h2 id="cap">Capturas de laboratorio</h2>
+      <ul>
+        {capturas.map((c) => <li><a href={`${urlProyecto(c.proyecto)}#evidencias`}>{c.proyecto.data.titulo}</a> <span class="muted">— {c.n} {c.n === 1 ? 'captura' : 'capturas'}</span></li>)}
+      </ul>
+    </section>
+
+    <section aria-labelledby="pend">
+      <h2 id="pend">Documentación pendiente de recuperar</h2>
+      <p class="muted">Lo que falta para completar cada ficha. Se mantiene a la vista a propósito.</p>
+      <ul class="pend">
+        {
+          pendientes.map((p) => (
+            <li>
+              <a href={urlProyecto(p)}>{p.data.titulo}</a>
+              <ul>{p.data.pendiente.map((x) => <li class="small">{x}</li>)}</ul>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: var(--space-12); }
+  .fig { margin: 0; padding: var(--space-3); }
+  .fig a { display: block; background: #fff; border-radius: 4px; overflow: hidden; }
+  .fig figcaption { margin-top: var(--space-2); color: var(--text-muted); }
+  .pend > li { margin-bottom: var(--space-3); }
+  td .small { margin-top: var(--space-1); }
+</style>

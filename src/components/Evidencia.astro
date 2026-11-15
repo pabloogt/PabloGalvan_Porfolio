@@ -1,0 +1,50 @@
+---
+import { Image, getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+interface Props {
+  imagen: ImageMetadata;
+  alt: string;
+  pie: string;
+  tipo: 'captura' | 'diseno' | 'diagrama';
+}
+const { imagen, alt, pie, tipo } = Astro.props;
+const etiquetas = { captura: 'Captura original', diseno: 'Diagrama del informe original', diagrama: 'Diagrama reconstruido' } as const;
+// Versión grande para abrir en una pestaña nueva (sin JavaScript ni lightbox).
+const esSvg = imagen.format === 'svg';
+const grande = esSvg ? { src: imagen.src } : await getImage({ src: imagen, width: Math.min(imagen.width, 1800), format: 'webp' });
+---
+
+<figure class="evidencia">
+  <a href={grande.src} target="_blank" rel="noopener" aria-label={`Ampliar: ${alt}`}>
+    {
+      esSvg ? (
+        <Image src={imagen} alt={alt} format="svg" loading="lazy" />
+      ) : (
+        <Image src={imagen} alt={alt} widths={[480, 800, 1200]} sizes="(max-width: 48rem) 100vw, 46rem" format="webp" loading="lazy" />
+      )
+    }
+  </a>
+  <figcaption>
+    <span class={`kind kind-${tipo}`}>{etiquetas[tipo]}</span>
+    {pie}
+  </figcaption>
+</figure>
+
+<style>
+  .evidencia { margin: 0 0 var(--space-8); }
+  .evidencia a { display: block; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff; }
+  .evidencia a:hover { border-color: var(--accent); }
+  .evidencia img { width: 100%; height: auto; }
+  figcaption { font-size: var(--fs-sm); color: var(--text-muted); margin-top: var(--space-2); }
+  .kind {
+    display: inline-block;
+    margin-right: var(--space-2);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+  }
+  .kind-diagrama { color: var(--st-c); }
+</style>

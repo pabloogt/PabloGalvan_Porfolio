@@ -1,0 +1,270 @@
+---
+import { render } from 'astro:content';
+import Base from '@/layouts/Base.astro';
+import EstadoBadge from '@/components/EstadoBadge.astro';
+import Evidencia from '@/components/Evidencia.astro';
+import { CATEGORIAS, COMPETENCIAS, TIPOS } from '@/data/taxonomia';
+import { todos, urlProyecto, type Proyecto } from '@/lib/proyectos';
+
+export async function getStaticPaths() {
+  const lista = await todos();
+  return lista.map((proyecto) => ({ params: { slug: proyecto.id }, props: { proyecto } }));
+}
+
+interface Props {
+  proyecto: Proyecto;
+}
+const { proyecto } = Astro.props;
+const d = proyecto.data;
+const { Content } = await render(proyecto);
+const hayProcedimiento = proyecto.body?.trim().length;
+const diagramas = d.evidencias.filter((e) => e.tipo === 'diagrama');
+const capturas = d.evidencias.filter((e) => e.tipo !== 'diagrama');
+const volver = d.area === 'ciberseguridad' ? { href: '/ciberseguridad/', texto: 'Ciberseguridad' } : { href: '/desarrollo/', texto: 'Desarrollo' };
+
+// Proyectos relacionados: misma categoría.
+const relacionados = (await todos()).filter((p) => p.data.categoria === d.categoria && p.id !== proyecto.id).slice(0, 3);
+
+// Índice de la ficha (solo apartados que existen).
+const indice = [
+  d.contexto && ['contexto', 'Contexto y objetivo'],
+  d.problema && ['problema', 'Problema técnico'],
+  (d.arquitectura || diagramas.length || d.entorno.length) && ['arquitectura', 'Entorno y arquitectura'],
+  hayProcedimiento && ['procedimiento', 'Procedimiento'],
+  d.problemas.length && ['problemas', 'Problemas encontrados'],
+  d.decisiones.length && ['decisiones', 'Decisiones técnicas'],
+  d.resultados.length && ['resultados', 'Resultados verificados'],
+  capturas.length && ['evidencias', 'Evidencias'],
+  d.limitaciones.length && ['limitaciones', 'Limitaciones'],
+  d.recomendaciones.length && ['recomendaciones', 'Medidas y recomendaciones'],
+  d.competencias.length && ['competencias', 'Conocimientos demostrados'],
+  d.documentos.length && ['documentacion', 'Documentación'],
+].filter(Boolean) as [string, string][];
+---
+
+<Base title={d.titulo} description={d.resumen} ogType="article">
+  <article class="container ficha">
+    <nav class="crumbs small" aria-label="Migas de pan">
+      <a href={volver.href}>{volver.texto}</a> <span aria-hidden="true">/</span> <span>{CATEGORIAS[d.categoria]}</span>
+    </nav>
+
+    <header class="head">
+      <h1>{d.titulo}</h1>
+      <p class="lead">{d.resumen}</p>
+      <ul class="facts" aria-label="Datos del proyecto">
+        <li><span class="k">Tipo</span> {TIPOS[d.tipo]}</li>
+        {d.fecha && <li><span class="k">Fecha</span> {d.fecha}</li>}
+        <li><span class="k">Estado</span> <EstadoBadge estado={d.estado} /></li>
+      </ul>
+    </header>
+
+    {
+      d.pendiente.length > 0 && (
+        <aside class="aviso" aria-label="Documentación pendiente">
+          <strong>Ficha incompleta.</strong> Falta por recuperar:
+          <ul>{d.pendiente.map((p) => <li>{p}</li>)}</ul>
+        </aside>
+      )
+    }
+
+    <div class="layout">
+      <aside class="side" aria-label="Resumen técnico">
+        {
+          indice.length > 2 && (
+            <nav class="toc" aria-label="Índice de la ficha">
+              <p class="side-title">En esta ficha</p>
+              <ol>{indice.map(([id, t]) => <li><a href={`#${id}`}>{t}</a></li>)}</ol>
+            </nav>
+          )
+        }
+        {
+          d.herramientas.length > 0 && (
+            <div>
+              <p class="side-title">Herramientas utilizadas</p>
+              <ul class="tags">{d.herramientas.map((h) => <li><span class="tag">{h}</span></li>)}</ul>
+            </div>
+          )
+        }
+        {
+          d.herramientasEstudiadas.length > 0 && (
+            <div>
+              <p class="side-title">Estudiadas, no utilizadas</p>
+              <ul class="tags">{d.herramientasEstudiadas.map((h) => <li><span class="tag tag-studied">{h}</span></li>)}</ul>
+            </div>
+          )
+        }
+        {
+          d.enlaces.length > 0 && (
+            <div>
+              <p class="side-title">Enlaces</p>
+              <ul class="plain">{d.enlaces.map((e) => <li><a href={e.href} rel="noopener">{e.texto}</a></li>)}</ul>
+            </div>
+          )
+        }
+      </aside>
+
+      <div class="body prose">
+        {
+          d.contexto && (
+            <section id="contexto">
+              <h2>Contexto y objetivo</h2>
+              <p>{d.contexto}</p>
+              {d.objetivo && <p><strong>Objetivo:</strong> {d.objetivo}</p>}
+            </section>
+          )
+        }
+        {
+          d.problema && (
+            <section id="problema">
+              <h2>Problema técnico</h2>
+              <p>{d.problema}</p>
+            </section>
+          )
+        }
+        {
+          (d.arquitectura || diagramas.length > 0 || d.entorno.length > 0) && (
+            <section id="arquitectura">
+              <h2>Entorno y arquitectura</h2>
+              {d.entorno.length > 0 && <ul>{d.entorno.map((e) => <li>{e}</li>)}</ul>}
+              {d.arquitectura && <p>{d.arquitectura}</p>}
+              {diagramas.map((e) => <Evidencia {...e} />)}
+            </section>
+          )
+        }
+        {
+          hayProcedimiento && (
+            <section id="procedimiento" class="md">
+              <h2>Procedimiento</h2>
+              <Content />
+            </section>
+          )
+        }
+        {
+          d.problemas.length > 0 && (
+            <section id="problemas">
+              <h2>Problemas encontrados</h2>
+              <ul>{d.problemas.map((t) => <li>{t}</li>)}</ul>
+            </section>
+          )
+        }
+        {
+          d.decisiones.length > 0 && (
+            <section id="decisiones">
+              <h2>Decisiones técnicas</h2>
+              <ul>{d.decisiones.map((t) => <li>{t}</li>)}</ul>
+            </section>
+          )
+        }
+        {
+          d.resultados.length > 0 && (
+            <section id="resultados">
+              <h2>Resultados verificados</h2>
+              <ul class="checks">{d.resultados.map((t) => <li>{t}</li>)}</ul>
+            </section>
+          )
+        }
+        {
+          capturas.length > 0 && (
+            <section id="evidencias">
+              <h2>Evidencias</h2>
+              <p class="muted small">Material original del trabajo. Pulsa una imagen para verla a tamaño completo.</p>
+              {capturas.map((e) => <Evidencia {...e} />)}
+            </section>
+          )
+        }
+        {
+          d.limitaciones.length > 0 && (
+            <section id="limitaciones">
+              <h2>Limitaciones</h2>
+              <ul>{d.limitaciones.map((t) => <li>{t}</li>)}</ul>
+            </section>
+          )
+        }
+        {
+          d.recomendaciones.length > 0 && (
+            <section id="recomendaciones">
+              <h2>Medidas y recomendaciones</h2>
+              <ul>{d.recomendaciones.map((t) => <li>{t}</li>)}</ul>
+            </section>
+          )
+        }
+        {
+          d.competencias.length > 0 && (
+            <section id="competencias">
+              <h2>Conocimientos demostrados</h2>
+              <ul class="tags">
+                {d.competencias.map((c) => <li><a class="tag" href={`/competencias/#${c}`}>{COMPETENCIAS[c]}</a></li>)}
+              </ul>
+            </section>
+          )
+        }
+        {
+          d.documentos.length > 0 && (
+            <section id="documentacion">
+              <h2>Documentación</h2>
+              <ul class="docs">
+                {d.documentos.map((doc) => (
+                  <li>
+                    <a href={doc.href}>{doc.titulo}</a> <span class="muted small">({doc.formato})</span>
+                    {doc.nota && <p class="muted small">{doc.nota}</p>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+
+        {
+          relacionados.length > 0 && (
+            <section class="rel" aria-labelledby="rel-title">
+              <h2 id="rel-title">Relacionado</h2>
+              <ul class="plain">{relacionados.map((p) => <li><a href={urlProyecto(p)}>{p.data.titulo}</a></li>)}</ul>
+            </section>
+          )
+        }
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .ficha { padding-top: var(--space-8); }
+  .crumbs { color: var(--text-muted); margin-bottom: var(--space-6); }
+  .crumbs a { color: var(--text-muted); }
+  .head { max-width: 52rem; margin-bottom: var(--space-8); }
+  .facts { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-8); }
+  .facts li { margin: 0; display: flex; align-items: center; gap: var(--space-2); }
+  .k { font-size: var(--fs-sm); color: var(--text-muted); }
+  .aviso {
+    border: 1px solid var(--st-b);
+    background: var(--st-b-bg);
+    border-radius: var(--radius);
+    padding: var(--space-4) var(--space-6);
+    margin-bottom: var(--space-8);
+    max-width: 52rem;
+  }
+  .aviso ul { margin: var(--space-2) 0 0; }
+  .layout { display: grid; gap: var(--space-8); grid-template-columns: minmax(0, 1fr); }
+  .body { min-width: 0; }
+  .head h1 { overflow-wrap: break-word; hyphens: auto; }
+  @media (min-width: 64rem) {
+    .layout { grid-template-columns: 16rem minmax(0, 1fr); gap: var(--space-12); }
+    .side { position: sticky; top: 5.5rem; align-self: start; max-height: calc(100vh - 7rem); overflow-y: auto; }
+  }
+  .side { display: flex; flex-direction: column; gap: var(--space-6); }
+  .side-title { font-size: var(--fs-sm); font-weight: 600; color: var(--text-muted); margin-bottom: var(--space-2); }
+  .toc ol { padding-left: 1.1rem; margin: 0; font-size: var(--fs-sm); }
+  .toc a { color: var(--text); text-decoration: none; }
+  .toc a:hover { color: var(--accent); text-decoration: underline; }
+  .plain { list-style: none; padding: 0; margin: 0; }
+  .body section:first-child h2 { margin-top: 0; }
+  .checks { list-style: none; padding: 0; }
+  .checks li { position: relative; padding-left: 1.6rem; }
+  .checks li::before { content: '✓'; position: absolute; left: 0; color: var(--st-a); font-weight: 700; }
+  .docs p { margin: 0; }
+  a.tag { text-decoration: none; }
+  a.tag:hover { border-color: var(--accent); color: var(--accent); }
+  .rel { margin-top: var(--space-12); padding-top: var(--space-6); border-top: 1px solid var(--border); }
+  .rel h2 { margin-top: 0; font-size: var(--fs-lg); }
+  .md :global(h3) { font-size: 1.1rem; }
+</style>

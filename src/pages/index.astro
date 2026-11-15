@@ -1,0 +1,105 @@
+---
+import Base from '@/layouts/Base.astro';
+import ProjectCard from '@/components/ProjectCard.astro';
+import { perfil } from '@/data/perfil';
+import { todos } from '@/lib/proyectos';
+
+const lista = await todos();
+const destacadosCiber = lista.filter((p) => p.data.destacado && p.data.area === 'ciberseguridad');
+const destacadosDev = lista.filter((p) => p.data.destacado && p.data.area === 'desarrollo');
+const totales = {
+  ciber: lista.filter((p) => p.data.area === 'ciberseguridad' && p.data.estado !== 'D').length,
+  dev: lista.filter((p) => p.data.area === 'desarrollo' && p.data.estado !== 'D').length,
+};
+---
+
+<Base title={perfil.nombre} description={`${perfil.titular}. ${perfil.objetivo}`}>
+  <section class="hero container">
+    <p class="eyebrow">Portfolio técnico</p>
+    <h1>{perfil.nombre}</h1>
+    <p class="role">{perfil.titular}</p>
+    <p class="lead">{perfil.descripcion}</p>
+    <p class="objective"><strong>Qué busco.</strong> {perfil.objetivo}</p>
+    <div class="btn-row">
+      <a class="btn btn-primary" href="/ciberseguridad/">Ver laboratorios de ciberseguridad</a>
+      <a class="btn" href={perfil.cv} download>Descargar CV (PDF)</a>
+      <a class="btn" href={perfil.github} rel="noopener">GitHub</a>
+      <a class="btn" href={`mailto:${perfil.email}`}>Contacto</a>
+    </div>
+    <p class="muted small meta">{perfil.ubicacion} · {perfil.disponibilidad}</p>
+  </section>
+
+  <section class="section container" aria-labelledby="como-leer">
+    <h2 id="como-leer" class="first">Cómo leer este portfolio</h2>
+    <div class="grid read">
+      <div>
+        <p>
+          Cada proyecto tiene una ficha con el contexto, la arquitectura, el procedimiento, los problemas encontrados, lo que se verificó y lo que no.
+          Las afirmaciones se apoyan en capturas e informes originales, saneados para su publicación.
+        </p>
+      </div>
+      <ul class="legend">
+        <li><strong>A</strong> · Implementado y documentado</li>
+        <li><strong>B</strong> · Implementado, con evidencias parciales</li>
+        <li><strong>C</strong> · Estudiado o preparado en formación</li>
+        <li><strong>D</strong> · Pendiente de recuperar documentación</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="ciber">
+    <div class="section-head">
+      <h2 id="ciber">Ciberseguridad destacada</h2>
+      <a href="/ciberseguridad/">Los {totales.ciber} trabajos documentados →</a>
+    </div>
+    <div class="grid grid-cards">
+      {destacadosCiber.map((p) => <ProjectCard proyecto={p} />)}
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="dev">
+    <div class="section-head">
+      <h2 id="dev">Desarrollo destacado</h2>
+      <a href="/desarrollo/">Los {totales.dev} proyectos →</a>
+    </div>
+    <div class="grid grid-cards">
+      {destacadosDev.map((p) => <ProjectCard proyecto={p} />)}
+    </div>
+  </section>
+
+  <section class="section container" aria-labelledby="tec">
+    <h2 id="tec">Tecnologías con las que he trabajado</h2>
+    <p class="muted">Solo herramientas usadas en proyectos o laboratorios documentados. Sin niveles ni porcentajes: los proyectos muestran el uso real.</p>
+    <dl class="tech">
+      {
+        Object.entries(perfil.tecnologias).map(([grupo, items]) => (
+          <div>
+            <dt>{grupo}</dt>
+            <dd>
+              <ul class="tags">{items.map((t) => <li><span class="tag">{t}</span></li>)}</ul>
+            </dd>
+          </div>
+        ))
+      }
+    </dl>
+    <p><a href="/competencias/">Competencias demostradas y proyectos que las respaldan →</a></p>
+  </section>
+</Base>
+
+<style>
+  .hero { padding-block: var(--space-16) var(--space-12); }
+  .hero h1 { margin-bottom: var(--space-2); }
+  .role { font-size: var(--fs-lg); font-weight: 600; color: var(--accent); margin-bottom: var(--space-6); }
+  .objective { max-width: var(--max-text); margin-bottom: var(--space-8); }
+  .meta { margin-top: var(--space-6); }
+  .first { margin-top: 0; }
+  .section h2 { margin-top: 0; }
+  .read { grid-template-columns: 1fr; align-items: start; }
+  @media (min-width: 48rem) { .read { grid-template-columns: 3fr 2fr; } }
+  .legend { list-style: none; padding: var(--space-4) var(--space-6); margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); font-size: var(--fs-sm); }
+  .section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-6); margin-bottom: var(--space-6); }
+  .section-head h2 { margin: 0; }
+  .tech { display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin: 0 0 var(--space-6); }
+  .tech dt { font-weight: 600; margin-bottom: var(--space-2); }
+  .tech dd { margin: 0; }
+</style>

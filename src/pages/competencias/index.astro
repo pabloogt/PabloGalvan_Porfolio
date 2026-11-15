@@ -1,0 +1,46 @@
+---
+import Base from '@/layouts/Base.astro';
+import { COMPETENCIAS } from '@/data/taxonomia';
+import { todos, urlProyecto } from '@/lib/proyectos';
+
+const lista = (await todos()).filter((p) => p.data.estado !== 'D');
+const filas = (Object.keys(COMPETENCIAS) as (keyof typeof COMPETENCIAS)[])
+  .map((c) => ({ id: c, nombre: COMPETENCIAS[c], proyectos: lista.filter((p) => p.data.competencias.includes(c)) }))
+  .filter((f) => f.proyectos.length > 0);
+---
+
+<Base title="Competencias demostradas" description="Competencias técnicas relacionadas con los proyectos y laboratorios que las respaldan, sin porcentajes ni niveles subjetivos.">
+  <div class="container page">
+    <header class="prose">
+      <p class="eyebrow">Para responsables de selección</p>
+      <h1>Competencias demostradas</h1>
+      <p class="lead">Cada competencia enlaza a los trabajos donde se puede comprobar. No asigno niveles: el detalle de cada ficha permite valorarlo.</p>
+    </header>
+
+    <div class="list">
+      {
+        filas.map((f) => (
+          <section id={f.id} class="row" aria-labelledby={`${f.id}-t`}>
+            <h2 id={`${f.id}-t`}>{f.nombre}</h2>
+            <ul>
+              {f.proyectos.map((p) => (
+                <li>
+                  <a href={urlProyecto(p)}>{p.data.titulo}</a> <span class="muted small">· estado {p.data.estado}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: var(--space-12); }
+  .list { margin-top: var(--space-8); }
+  .row { display: grid; gap: var(--space-2) var(--space-8); padding-block: var(--space-6); border-top: 1px solid var(--border); }
+  @media (min-width: 48rem) { .row { grid-template-columns: 16rem 1fr; } }
+  .row h2 { margin: 0; font-size: 1.1rem; }
+  .row ul { margin: 0; }
+</style>

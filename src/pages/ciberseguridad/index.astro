@@ -1,0 +1,27 @@
+---
+import Base from '@/layouts/Base.astro';
+import AreaListing from '@/components/AreaListing.astro';
+import { porArea } from '@/lib/proyectos';
+
+const proyectos = await porArea('ciberseguridad');
+---
+
+<Base title="Ciberseguridad" description="Laboratorios de detección, monitorización, redes, hardening, auditoría web, seguridad móvil, análisis forense y criptografía, con evidencias y limitaciones documentadas.">
+  <div class="container page">
+    <header class="prose">
+      <p class="eyebrow">Laboratorios e investigación</p>
+      <h1>Ciberseguridad</h1>
+      <p class="lead">
+        Trabajos realizados durante la especialización, agrupados por área. Cada ficha indica qué se implementó, cómo se comprobó y qué quedó sin demostrar.
+      </p>
+    </header>
+    <AreaListing proyectos={proyectos} />
+    <p class="muted small">
+      Los conocimientos estudiados sin un proyecto propio (forense cloud y de virtualización, gobierno y cumplimiento) están en <a href="/formacion/">Formación</a>.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: var(--space-12); }
+</style>

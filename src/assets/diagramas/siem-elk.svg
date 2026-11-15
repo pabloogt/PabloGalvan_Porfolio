@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="330" viewBox="0 0 900 330" font-family="Segoe UI, Arial, sans-serif" font-size="14">
+  <rect width="900" height="330" fill="#ffffff"/>
+  <defs><marker id="a" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L9,3 L0,6 z" fill="#444"/></marker></defs>
+  <text x="20" y="30" font-size="16" font-weight="700" fill="#1b1d21">SIEM ELK · flujo de eventos (diagrama reconstruido)</text>
+  <rect x="20" y="90" width="150" height="80" rx="8" fill="#f0f0ec" stroke="#8a8f98"/>
+  <text x="95" y="122" text-anchor="middle" font-weight="700" fill="#1b1d21">Kali Linux</text>
+  <text x="95" y="145" text-anchor="middle" fill="#565b64">ping · ssh · curl</text>
+  <rect x="215" y="70" width="190" height="120" rx="8" fill="#e2eff2" stroke="#0b5d74" stroke-width="2"/>
+  <text x="310" y="98" text-anchor="middle" font-weight="700" fill="#08465a">Agente IDS (DMZ1)</text>
+  <text x="310" y="122" text-anchor="middle" fill="#1b1d21">Snort · local.rules</text>
+  <text x="310" y="144" text-anchor="middle" fill="#1b1d21">snort.alert.fast</text>
+  <text x="310" y="168" text-anchor="middle" fill="#1b1d21">Filebeat 6.5.4</text>
+  <rect x="455" y="55" width="425" height="215" rx="8" fill="none" stroke="#c2410c" stroke-dasharray="6 4"/>
+  <text x="668" y="78" text-anchor="middle" font-weight="700" fill="#c2410c">Servidor SIEM 192.168.100.15</text>
+  <rect x="470" y="95" width="125" height="90" rx="8" fill="#f0f0ec" stroke="#8a8f98"/>
+  <text x="532" y="125" text-anchor="middle" font-weight="700" fill="#1b1d21">Logstash</text>
+  <text x="532" y="147" text-anchor="middle" fill="#565b64">beats :5044</text>
+  <text x="532" y="167" text-anchor="middle" fill="#565b64">grok + mutate</text>
+  <rect x="610" y="95" width="125" height="90" rx="8" fill="#f0f0ec" stroke="#8a8f98"/>
+  <text x="672" y="125" text-anchor="middle" font-weight="700" fill="#1b1d21">Elasticsearch</text>
+  <text x="672" y="147" text-anchor="middle" fill="#565b64">:9200</text>
+  <text x="672" y="167" text-anchor="middle" fill="#565b64">índice logstash</text>
+  <rect x="750" y="95" width="115" height="90" rx="8" fill="#f0f0ec" stroke="#8a8f98"/>
+  <text x="807" y="125" text-anchor="middle" font-weight="700" fill="#1b1d21">Kibana</text>
+  <text x="807" y="147" text-anchor="middle" fill="#565b64">:81</text>
+  <text x="807" y="167" text-anchor="middle" fill="#565b64">dashboard</text>
+  <line x1="170" y1="130" x2="212" y2="130" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="405" y1="130" x2="467" y2="130" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="595" y1="140" x2="607" y2="140" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+  <line x1="735" y1="140" x2="747" y2="140" stroke="#444" stroke-width="2" marker-end="url(#a)"/>
+  <text x="470" y="215" fill="#1b1d21" font-size="13">Campos extraídos: fecha_y_hora, maquina, sid, alerta, protocolo,</text>
+  <text x="470" y="235" fill="#1b1d21" font-size="13">ip_origen, puerto_origen, ip_destino, puerto_destino,</text>
+  <text x="470" y="255" fill="#1b1d21" font-size="13">zona_origen (calculado), tipo_evento</text>
+  <text x="20" y="310" fill="#565b64" font-size="12">Versiones y puertos según el informe original. Kibana se publicó en el puerto 81 porque el 80 estaba ocupado.</text>
+</svg>

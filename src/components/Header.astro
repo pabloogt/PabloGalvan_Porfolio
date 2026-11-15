@@ -1,0 +1,112 @@
+---
+import { perfil } from '@/data/perfil';
+
+const enlaces = [
+  { href: '/ciberseguridad/', texto: 'Ciberseguridad' },
+  { href: '/desarrollo/', texto: 'Desarrollo' },
+  { href: '/documentacion/', texto: 'Documentación' },
+  { href: '/competencias/', texto: 'Competencias' },
+  { href: '/formacion/', texto: 'Formación' },
+  { href: '/sobre-mi/', texto: 'Sobre mí' },
+];
+const ruta = Astro.url.pathname;
+const activo = (href: string) => ruta.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="container bar">
+    <a class="brand" href="/" aria-label={`${perfil.nombre}, inicio`}>
+      <span class="mark" aria-hidden="true">PG</span>
+      <span class="name">{perfil.nombreCorto}</span>
+    </a>
+
+    <details class="menu">
+      <summary aria-label="Abrir menú de navegación">Menú</summary>
+      <nav aria-label="Principal">
+        <ul>
+          {
+            enlaces.map((e) => (
+              <li>
+                <a href={e.href} aria-current={activo(e.href) ? 'page' : undefined}>
+                  {e.texto}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 92%, transparent);
+    backdrop-filter: blur(6px);
+    border-bottom: 1px solid var(--border);
+  }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); min-height: 4rem; }
+  .brand { display: flex; align-items: center; gap: var(--space-2); text-decoration: none; color: var(--text); font-weight: 700; }
+  .mark {
+    display: grid; place-items: center;
+    width: 2rem; height: 2rem;
+    border-radius: 6px;
+    background: var(--accent);
+    color: var(--surface);
+    font-size: 0.8rem;
+    letter-spacing: 0.04em;
+  }
+  ul { list-style: none; margin: 0; padding: 0; display: flex; gap: var(--space-1); }
+  li { margin: 0; }
+  nav a {
+    display: block;
+    padding: 0.45rem 0.7rem;
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+  nav a:hover { color: var(--text); background: var(--surface-2); }
+  nav a[aria-current='page'] { color: var(--accent); background: var(--accent-soft); }
+
+  /* Escritorio: el <details> se comporta como una barra siempre abierta */
+  summary { display: none; }
+  .menu > nav { display: block; }
+
+  @media (max-width: 60rem) {
+    summary {
+      display: inline-flex;
+      list-style: none;
+      cursor: pointer;
+      padding: 0.45rem 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: var(--fs-sm);
+    }
+    summary::-webkit-details-marker { display: none; }
+    .menu:not([open]) > nav { display: none; }
+    .menu[open] > nav {
+      position: absolute;
+      left: 0; right: 0; top: 100%;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: var(--space-2) 1rem var(--space-4);
+    }
+    ul { flex-direction: column; }
+    nav a { padding: 0.7rem 0.6rem; font-size: 1rem; }
+  }
+</style>
+
+<script>
+  // En escritorio el menú debe estar siempre abierto; en móvil, cerrado por defecto.
+  const menu = document.querySelector<HTMLDetailsElement>('.menu');
+  const mq = window.matchMedia('(min-width: 60.0625rem)');
+  const sync = () => { if (menu) menu.open = mq.matches; };
+  sync();
+  mq.addEventListener('change', sync);
+</script>

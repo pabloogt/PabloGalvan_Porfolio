@@ -1,0 +1,71 @@
+---
+import Base from '@/layouts/Base.astro';
+import { formacion, evaluaciones, conocimientosEstudiados } from '@/data/perfil';
+---
+
+<Base title="Formación" description="Titulaciones en DAM y DAW, especialización en Ciberseguridad y contenidos trabajados en las evaluaciones prácticas.">
+  <div class="container page">
+    <header class="prose">
+      <p class="eyebrow">Formación</p>
+      <h1>Formación</h1>
+      <p class="lead">Titulaciones y contenidos trabajados. Las evaluaciones aparecen como formación, separadas de los proyectos implementados.</p>
+    </header>
+
+    <section aria-labelledby="tit">
+      <h2 id="tit">Titulaciones</h2>
+      <ol class="timeline">
+        {
+          formacion.map((f) => (
+            <li class="card">
+              <h3>{f.titulo}</h3>
+              <p class="muted small">{f.centro} · {f.periodo}</p>
+              <p>{f.detalle}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section aria-labelledby="ev">
+      <h2 id="ev">Formación técnica y evaluaciones prácticas</h2>
+      <p class="muted">Contenidos trabajados en las evaluaciones de la especialización. No son proyectos ni experiencia laboral.</p>
+      <div class="grid grid-cards">
+        {
+          evaluaciones.map((e) => (
+            <article class="card">
+              <h3>{e.titulo}</h3>
+              {'fecha' in e && <p class="muted small">{e.fecha}</p>}
+              <ul class="tags">{e.temas.map((t) => <li><span class="tag">{t}</span></li>)}</ul>
+              {'nota' in e && <p class="muted small note">{e.nota}</p>}
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <section aria-labelledby="est">
+      <h2 id="est">Estudiado sin proyecto propio documentado</h2>
+      <p class="muted">Herramientas y marcos que conozco por la formación, pero que no he usado en un ejercicio que pueda mostrar.</p>
+      <div class="grid grid-cards">
+        {
+          conocimientosEstudiados.map((c) => (
+            <article class="card">
+              <h3>{c.titulo}</h3>
+              <p>{c.texto}</p>
+              <ul class="tags">{c.herramientas.map((h) => <li><span class="tag tag-studied">{h}</span></li>)}</ul>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: var(--space-12); }
+  .card h3 { margin-top: 0; font-size: 1.05rem; }
+  .timeline { list-style: none; padding: 0; display: grid; gap: var(--space-4); }
+  .timeline li { margin: 0; }
+  .timeline p:last-child { margin-bottom: 0; }
+  .note { margin: var(--space-3) 0 0; }
+</style>

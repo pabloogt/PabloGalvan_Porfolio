@@ -1,0 +1,54 @@
+---
+import Base from '@/layouts/Base.astro';
+import { perfil } from '@/data/perfil';
+---
+
+<Base title="Sobre mí y contacto" description={`${perfil.nombre}: ${perfil.titular}. Contacto, GitHub, LinkedIn y CV.`}>
+  <div class="container page">
+    <div class="cols">
+      <article class="prose">
+        <p class="eyebrow">Sobre mí</p>
+        <h1>{perfil.nombre}</h1>
+        <p class="lead">{perfil.titular}.</p>
+        <p>
+          Estudié Desarrollo de Aplicaciones Multiplataforma y Desarrollo de Aplicaciones Web, y después me especialicé en ciberseguridad.
+          Esa combinación me permite entender una aplicación por dentro y, a la vez, cómo se ataca, cómo se monitoriza y cómo se protege.
+        </p>
+        <p>
+          En prácticas he trabajado en equipos de desarrollo con React, TypeScript, APIs y Git, y he participado en un despliegue en producción.
+          En la especialización he montado laboratorios con IDS, SIEM, firewalls, hardening y análisis forense, y he aprendido a documentar lo que hago,
+          incluidas las pruebas que no salieron como esperaba.
+        </p>
+        <p>
+          No tengo experiencia profesional en un SOC. Lo que puedo aportar es base técnica, método, capacidad de aprendizaje y documentación cuidada.
+        </p>
+        <p><strong>Objetivo.</strong> {perfil.objetivo}</p>
+      </article>
+
+      <aside class="card contact" aria-labelledby="contacto">
+        <h2 id="contacto">Contacto</h2>
+        <dl>
+          <dt>Correo</dt>
+          <dd><a href={`mailto:${perfil.email}`}>{perfil.email}</a></dd>
+          <dt>GitHub</dt>
+          <dd><a href={perfil.github} rel="me noopener">github.com/pabloogt</a></dd>
+          <dt>LinkedIn</dt>
+          <dd><a href={perfil.linkedin} rel="me noopener">pablo-galvan-tejada</a></dd>
+          <dt>Ubicación</dt>
+          <dd>{perfil.ubicacion} · {perfil.disponibilidad}</dd>
+        </dl>
+        <a class="btn btn-primary" href={perfil.cv} download>Descargar CV (PDF)</a>
+      </aside>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page { padding-top: var(--space-12); }
+  .cols { display: grid; gap: var(--space-8); }
+  @media (min-width: 64rem) { .cols { grid-template-columns: minmax(0, 1fr) 22rem; align-items: start; } }
+  .contact h2 { margin-top: 0; font-size: var(--fs-lg); }
+  .contact dl { margin: 0 0 var(--space-6); }
+  .contact dt { font-size: var(--fs-sm); color: var(--text-muted); }
+  .contact dd { margin: 0 0 var(--space-3); overflow-wrap: anywhere; }
+</style>

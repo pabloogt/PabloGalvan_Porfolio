@@ -1,0 +1,32 @@
+---
+import { perfil } from '@/data/perfil';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container inner">
+    <div>
+      <p class="who"><strong>{perfil.nombre}</strong> · {perfil.ubicacion}</p>
+      <p class="muted small">
+        Todo el material publicado procede de laboratorios propios y está saneado: sin contraseñas, claves ni datos de terceros.
+      </p>
+    </div>
+    <ul class="links">
+      <li><a href={`mailto:${perfil.email}`}>Correo</a></li>
+      <li><a href={perfil.github} rel="me noopener">GitHub</a></li>
+      <li><a href={perfil.linkedin} rel="me noopener">LinkedIn</a></li>
+      <li><a href={perfil.cv} download>CV (PDF)</a></li>
+    </ul>
+  </div>
+  <p class="container muted small copy">© {year} {perfil.nombre}</p>
+</footer>
+
+<style>
+  .site-footer { border-top: 1px solid var(--border); margin-top: var(--space-16); padding-block: var(--space-8); background: var(--surface); }
+  .inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-6); }
+  .inner > div { max-width: 36rem; }
+  .who { margin-bottom: var(--space-2); }
+  .links { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-4); }
+  .links li { margin: 0; }
+  .copy { margin-top: var(--space-6); margin-bottom: 0; }
+</style>

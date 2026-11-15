@@ -1,0 +1,47 @@
+---
+import { ESTADOS } from '@/data/taxonomia';
+
+interface Props {
+  estado: keyof typeof ESTADOS;
+  /** Muestra también la explicación larga debajo. */
+  detalle?: boolean;
+}
+const { estado, detalle = false } = Astro.props;
+const info = ESTADOS[estado];
+---
+
+<span class={`badge st-${estado.toLowerCase()}`} title={info.descripcion}>
+  <span class="letter" aria-hidden="true">{estado}</span>
+  {info.etiqueta}
+</span>
+{detalle && <p class="muted small explain">{info.descripcion}</p>}
+
+<style>
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.15rem 0.6rem 0.15rem 0.2rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .letter {
+    display: grid; place-items: center;
+    width: 1.25rem; height: 1.25rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    background: currentColor;
+  }
+  .letter { color: inherit; }
+  .st-a { color: var(--st-a); background: var(--st-a-bg); }
+  .st-b { color: var(--st-b); background: var(--st-b-bg); }
+  .st-c { color: var(--st-c); background: var(--st-c-bg); }
+  .st-d { color: var(--st-d); background: var(--st-d-bg); }
+  .st-a .letter { background: var(--st-a); color: var(--st-a-bg); }
+  .st-b .letter { background: var(--st-b); color: var(--st-b-bg); }
+  .st-c .letter { background: var(--st-c); color: var(--st-c-bg); }
+  .st-d .letter { background: var(--st-d); color: var(--st-d-bg); }
+  .explain { margin: var(--space-2) 0 0; }
+</style>
