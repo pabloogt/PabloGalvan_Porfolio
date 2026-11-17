@@ -1,0 +1,108 @@
+---
+/**
+ * Figura del inicio: un plano con las tres capas en las que trabajo.
+ * Cada caja corresponde a algo que aparece en los proyectos del portfolio.
+ * SVG en línea para que use los colores del tema; sin imágenes ni librerías.
+ */
+const filas = [
+  {
+    etiqueta: '01 construir',
+    cajas: [
+      ['Interfaz', 'React · TypeScript'],
+      ['Servidor', 'Node · Spring Boot'],
+      ['Datos', 'SQL · NoSQL'],
+    ],
+  },
+  {
+    etiqueta: '02 publicar',
+    cajas: [
+      ['Dominio', 'DNS · hosting'],
+      ['Transporte', 'HTTPS · cabeceras'],
+      ['Producción', 'webs en línea'],
+    ],
+  },
+  {
+    etiqueta: '03 defender',
+    cajas: [
+      ['Sensor', 'Snort · Suricata'],
+      ['SIEM', 'ELK · Wazuh'],
+      ['Informe', 'evidencias'],
+    ],
+  },
+] as const;
+
+const W = 560;
+const boxW = 150;
+const boxH = 62;
+const gapX = 32;
+const x0 = 22;
+const rowY = [58, 188, 318];
+---
+
+<figure class="hero-figure" aria-label="Esquema de mi trabajo en tres capas: construir (interfaz, servidor y datos), publicar (dominio, transporte seguro y producción) y defender (sensor, SIEM e informe).">
+  <svg viewBox={`0 0 ${W} 430`} role="presentation" focusable="false">
+    <!-- Marcas de registro en las esquinas -->
+    <g class="marks">
+      <path d="M4 16V4h12M544 4h12v12M556 414v12h-12M16 426H4v-12"></path>
+    </g>
+    <text class="cap" x="22" y="22">fig. 01 — del código a la alerta</text>
+
+    {
+      filas.map((fila, r) => (
+        <g>
+          <text class="row-label" x={x0} y={rowY[r]! - 12}>{fila.etiqueta}</text>
+          <line class="rule" x1={x0 + 108} y1={rowY[r]! - 16} x2={W - 22} y2={rowY[r]! - 16} />
+          {fila.cajas.map(([t, s], c) => {
+            const x = x0 + c * (boxW + gapX);
+            const y = rowY[r]!;
+            const acento = r === 2 && c === 1;
+            return (
+              <g>
+                <rect class:list={['box', { accent: acento }]} x={x} y={y} width={boxW} height={boxH} rx="3" />
+                <text class:list={['t', { onaccent: acento }]} x={x + 14} y={y + 27}>{t}</text>
+                <text class:list={['s', { onaccent: acento }]} x={x + 14} y={y + 46}>{s}</text>
+                {c < 2 && <path class="arrow" d={`M${x + boxW + 5} ${y + boxH / 2}h${gapX - 12}m-5 -4l5 4l-5 4`} />}
+              </g>
+            );
+          })}
+          {r < 2 && <path class="down" d={`M${x0 + 2 * (boxW + gapX) + boxW / 2} ${rowY[r]! + boxH + 6}v${rowY[r + 1]! - rowY[r]! - boxH - 40}`} />}
+        </g>
+      ))
+    }
+
+    <!-- La alerta: lo que el SIEM devuelve -->
+    <g class="alert">
+      <circle cx={x0 + boxW + gapX + boxW - 2} cy={rowY[2]! + 2} r="9"></circle>
+      <text x={x0 + boxW + gapX + boxW - 2} y={rowY[2]! + 6} text-anchor="middle">!</text>
+    </g>
+    <text class="cap" x={W - 22} y="418" text-anchor="end">pablo galván · madrid</text>
+  </svg>
+</figure>
+
+<style>
+  .hero-figure { margin: 0; }
+  svg { width: 100%; height: auto; overflow: visible; }
+  text { font-family: var(--font-mono); }
+  .cap { font-size: 10px; fill: var(--text-muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .row-label { font-size: 11px; fill: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; }
+  .rule { stroke: var(--border); stroke-width: 1; }
+  .marks path { fill: none; stroke: var(--text); stroke-width: 1.5; }
+  .box { fill: var(--surface); stroke: var(--text); stroke-width: 1.25; }
+  .box.accent { fill: var(--accent); stroke: var(--accent); }
+  .t { font-family: var(--font-display); font-size: 17px; font-weight: 650; fill: var(--text); letter-spacing: -0.01em; }
+  .s { font-size: 10.5px; fill: var(--text-muted); }
+  .onaccent { fill: var(--on-accent); }
+  .arrow, .down { fill: none; stroke: var(--text); stroke-width: 1.25; }
+  .down { stroke-dasharray: 3 4; stroke: var(--text-muted); }
+  .alert circle { fill: var(--bg); stroke: var(--accent); stroke-width: 1.5; }
+  .alert text { font-size: 12px; font-weight: 700; fill: var(--accent); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .box { animation: draw 0.6s var(--ease) both; }
+    g:nth-of-type(3) .box { animation-delay: 0.12s; }
+    g:nth-of-type(4) .box { animation-delay: 0.24s; }
+    .alert { animation: pop 0.5s var(--ease) 0.7s both; transform-origin: center; transform-box: fill-box; }
+    @keyframes draw { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    @keyframes pop { from { opacity: 0; transform: scale(0.4); } to { opacity: 1; transform: none; } }
+  }
+</style>

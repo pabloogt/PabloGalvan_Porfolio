@@ -28,6 +28,17 @@ const proyectos = defineCollection({
       destacado: z.boolean().default(false),
       /** Orden dentro de su categoría (menor = antes). */
       orden: z.number().default(100),
+      /** Qué hice yo en el proyecto (una frase). */
+      rol: z.string().optional(),
+      /** Imagen de portada para las tarjetas destacadas (captura de la web o del proyecto). */
+      portada: image().optional(),
+      portadaAlt: z.string().optional(),
+      /** Cifras verificables para la tarjeta destacada cuando no hay portada. */
+      cifras: z.array(z.object({ valor: z.string(), etiqueta: z.string() })).max(4).default([]),
+      /** Web pública del proyecto, si existe. */
+      web: z.url().optional(),
+      /** Repositorio público, solo si se puede compartir. */
+      repo: z.url().optional(),
       /** Texto libre: "Abril 2026", "Mar.–jun. 2025"… */
       fecha: z.string().optional(),
       contexto: z.string().optional(),

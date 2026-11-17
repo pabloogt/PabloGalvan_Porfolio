@@ -15,6 +15,8 @@ const BLOQUEADOS = [
   { nombre: 'Clave privada', re: /-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----/ },
   { nombre: 'Token tipo GitHub', re: /gh[pousr]_[A-Za-z0-9]{30,}/ },
   { nombre: 'Línea de contraseña', re: /Password:\s*\S{6,}/ },
+  { nombre: 'Secreto de RADIUS de la práctica', re: /galvan12/i },
+  { nombre: 'Contenido no autorizado de Cüimo', re: /cuimo\.com\/financiacion/i },
 ];
 
 const raices = ['src', 'public', ...(existsSync('dist') ? ['dist'] : [])];

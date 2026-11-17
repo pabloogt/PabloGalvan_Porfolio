@@ -1,5 +1,5 @@
 ---
-import ProjectCard from './ProjectCard.astro';
+import ProjectRow from './ProjectRow.astro';
 import { agruparPorCategoria, type Proyecto } from '@/lib/proyectos';
 
 interface Props {
@@ -7,14 +7,15 @@ interface Props {
 }
 const grupos = agruparPorCategoria(Astro.props.proyectos);
 const slug = (s: string) => `cat-${s}`;
+const num = (i: number) => String(i + 1).padStart(2, '0');
 ---
 
 {
   grupos.length > 1 && (
     <nav class="cats" aria-label="Categorías">
       <ul>
-        {grupos.map((g) => (
-          <li><a href={`#${slug(g.categoria)}`}>{g.titulo} <span class="muted">({g.proyectos.length})</span></a></li>
+        {grupos.map((g, i) => (
+          <li><a href={`#${slug(g.categoria)}`}><span class="n">{num(i)}</span>{g.titulo} <span class="c">{g.proyectos.length}</span></a></li>
         ))}
       </ul>
     </nav>
@@ -22,24 +23,32 @@ const slug = (s: string) => `cat-${s}`;
 }
 
 {
-  grupos.map((g) => (
+  grupos.map((g, i) => (
     <section class="cat" id={slug(g.categoria)} aria-labelledby={`${slug(g.categoria)}-t`}>
-      <h2 id={`${slug(g.categoria)}-t`}>{g.titulo}</h2>
-      <div class="grid grid-cards">
-        {g.proyectos.map((p) => <ProjectCard proyecto={p} />)}
+      <div class="section-head">
+        <span class="num">{num(i)}</span>
+        <h2 id={`${slug(g.categoria)}-t`}>{g.titulo}</h2>
       </div>
+      <ul class="rows">
+        {g.proyectos.map((p) => <ProjectRow proyecto={p} />)}
+      </ul>
     </section>
   ))
 }
 
 <style>
-  .cats ul { list-style: none; padding: 0; margin: 0 0 var(--space-8); display: flex; flex-wrap: wrap; gap: var(--space-2); }
+  .cats ul { list-style: none; padding: 0; margin: var(--space-8) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-2); }
   .cats li { margin: 0; }
   .cats a {
-    display: inline-block; padding: 0.35rem 0.75rem; border: 1px solid var(--border); border-radius: 999px;
-    background: var(--surface); text-decoration: none; color: var(--text); font-size: var(--fs-sm);
+    display: inline-flex; align-items: baseline; gap: 0.5rem;
+    padding: 0.4rem 0.75rem; border: 1px solid var(--border); border-radius: var(--radius);
+    text-decoration: none; color: var(--text); font-size: var(--fs-sm);
+    transition: border-color 0.18s var(--ease);
   }
-  .cats a:hover { border-color: var(--accent); }
-  .cat { padding-bottom: var(--space-8); }
-  .cat h2 { margin-top: var(--space-8); }
+  .cats a:hover { border-color: var(--border-strong); }
+  .n { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--accent); }
+  .c { font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-muted); }
+  .cat { margin-top: var(--space-16); }
+  .cat .section-head { margin-bottom: 0; }
+  .rows { list-style: none; padding: 0; margin: 0; }
 </style>

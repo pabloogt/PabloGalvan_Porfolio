@@ -1,54 +1,120 @@
 ---
 import Base from '@/layouts/Base.astro';
-import { perfil } from '@/data/perfil';
+import { perfil, tecnologias, formacion } from '@/data/perfil';
 ---
 
-<Base title="Sobre mí y contacto" description={`${perfil.nombre}: ${perfil.titular}. Contacto, GitHub, LinkedIn y CV.`}>
+<Base title="Sobre mí" description={`${perfil.nombre}: ${perfil.titular}. Formación en DAW, DAM y ciberseguridad, intereses técnicos y forma de trabajar.`}>
   <div class="container page">
     <div class="cols">
-      <article class="prose">
+      <article class="prose bio">
         <p class="eyebrow">Sobre mí</p>
-        <h1>{perfil.nombre}</h1>
-        <p class="lead">{perfil.titular}.</p>
+        <h1>Me gusta entender cómo funciona algo antes de fiarme de ello.</h1>
+        <p class="lead">Soy Pablo, desarrollador web con especialización en ciberseguridad. Vivo en Madrid.</p>
         <p>
-          Estudié Desarrollo de Aplicaciones Multiplataforma y Desarrollo de Aplicaciones Web, y después me especialicé en ciberseguridad.
-          Esa combinación me permite entender una aplicación por dentro y, a la vez, cómo se ataca, cómo se monitoriza y cómo se protege.
+          Empecé por el desarrollo. Estudié DAM y DAW, hice prácticas en dos equipos de desarrollo web y aprendí a trabajar con React, TypeScript,
+          APIs y Git dentro de un equipo. Por mi cuenta he montado y publicado webs completas, desde el dominio hasta el contenido.
         </p>
         <p>
-          En prácticas he trabajado en equipos de desarrollo con React, TypeScript, APIs y Git, y he participado en un despliegue en producción.
-          En la especialización he montado laboratorios con IDS, SIEM, firewalls, hardening y análisis forense, y he aprendido a documentar lo que hago,
-          incluidas las pruebas que no salieron como esperaba.
+          Después me especialicé en ciberseguridad porque quería saber qué pasa cuando alguien intenta romper lo que uno construye. Ahí descubrí que
+          disfruto montando laboratorios: un IDS que detecta un escaneo, un SIEM que ordena miles de alertas, un servidor al que hay que cerrarle
+          puertas. Y que documentar bien, incluido lo que falla, es parte del trabajo.
         </p>
         <p>
-          No tengo experiencia profesional en un SOC. Lo que puedo aportar es base técnica, método, capacidad de aprendizaje y documentación cuidada.
+          Las dos mitades se juntan en WebTrustScan, una herramienta que estoy desarrollando para revisar la configuración de seguridad de una web.
         </p>
-        <p><strong>Objetivo.</strong> {perfil.objetivo}</p>
+        <p>
+          Soy un perfil junior. No tengo años de experiencia, pero sí base técnica, proyectos que se pueden ver y costumbre de comprobar las cosas
+          antes de afirmarlas.
+        </p>
+        <p><strong>Qué busco.</strong> {perfil.objetivo}</p>
+        <div class="btn-row">
+          <a class="btn btn-primary" href="/contacto/">Contactar <span class="arrow" aria-hidden="true">→</span></a>
+          {perfil.cv && <a class="btn" href={perfil.cv} download>Descargar CV</a>}
+        </div>
       </article>
 
-      <aside class="card contact" aria-labelledby="contacto">
-        <h2 id="contacto">Contacto</h2>
+      <aside class="facts" aria-label="Datos">
         <dl>
-          <dt>Correo</dt>
-          <dd><a href={`mailto:${perfil.email}`}>{perfil.email}</a></dd>
-          <dt>GitHub</dt>
-          <dd><a href={perfil.github} rel="me noopener">github.com/pabloogt</a></dd>
-          <dt>LinkedIn</dt>
-          <dd><a href={perfil.linkedin} rel="me noopener">pablo-galvan-tejada</a></dd>
+          <dt>Perfil</dt>
+          <dd>{perfil.titular}</dd>
           <dt>Ubicación</dt>
-          <dd>{perfil.ubicacion} · {perfil.disponibilidad}</dd>
+          <dd>{perfil.ubicacion}</dd>
+          <dt>Idiomas</dt>
+          <dd>{perfil.idiomas}</dd>
+          <dt>Situación</dt>
+          <dd>{perfil.disponibilidad}</dd>
+          <dt>Formación</dt>
+          <dd>
+            <ul>{formacion.map((f) => <li>{f.titulo} <span class="muted">· {f.centro}</span></li>)}</ul>
+          </dd>
         </dl>
-        <a class="btn btn-primary" href={perfil.cv} download>Descargar CV (PDF)</a>
+        <p><a class="link-arrow" href="/formacion/">Formación en detalle</a></p>
+        <p><a class="link-arrow" href="/experiencia/">Experiencia</a></p>
       </aside>
     </div>
+
+    <section aria-labelledby="tec">
+      <div class="section-head">
+        <span class="num">+</span>
+        <h2 id="tec">Tecnologías</h2>
+        <a class="more link-arrow" href="/competencias/">Competencias demostradas</a>
+      </div>
+      <p class="muted intro">Agrupadas por área y con el contexto en el que las he usado. Sin niveles ni porcentajes: los proyectos muestran el uso real.</p>
+      <dl class="tech">
+        {
+          tecnologias.map((g) => (
+            <div>
+              <dt>{g.grupo}</dt>
+              <dd>
+                <p class="label base">{g.base}</p>
+                <ul class="tags">{g.items.map((t) => <li><span class="tag">{t}</span></li>)}</ul>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </section>
+
+    <section aria-labelledby="mas">
+      <div class="section-head">
+        <span class="num">+</span>
+        <h2 id="mas">Para profundizar</h2>
+      </div>
+      <ul class="more-links">
+        <li><a href="/competencias/"><strong>Competencias</strong><span>Cada competencia, con los trabajos que la respaldan.</span></a></li>
+        <li><a href="/documentacion/"><strong>Documentación técnica</strong><span>Informes saneados, diagramas y capturas.</span></a></li>
+        <li><a href="/formacion/"><strong>Formación</strong><span>Titulaciones y contenidos trabajados.</span></a></li>
+      </ul>
+    </section>
   </div>
 </Base>
 
 <style>
-  .page { padding-top: var(--space-12); }
-  .cols { display: grid; gap: var(--space-8); }
-  @media (min-width: 64rem) { .cols { grid-template-columns: minmax(0, 1fr) 22rem; align-items: start; } }
-  .contact h2 { margin-top: 0; font-size: var(--fs-lg); }
-  .contact dl { margin: 0 0 var(--space-6); }
-  .contact dt { font-size: var(--fs-sm); color: var(--text-muted); }
-  .contact dd { margin: 0 0 var(--space-3); overflow-wrap: anywhere; }
+  .cols { display: grid; gap: var(--space-12); }
+  @media (min-width: 64rem) { .cols { grid-template-columns: minmax(0, 1fr) 21rem; align-items: start; gap: var(--space-16); } }
+  .bio h1 { font-size: var(--fs-2xl); }
+  .bio .btn-row { margin-top: var(--space-8); }
+  .facts { border-top: 1px solid var(--border-strong); padding-top: var(--space-4); }
+  @media (min-width: 64rem) { .facts { position: sticky; top: 6rem; } }
+  .facts dl { margin: 0 0 var(--space-6); }
+  .facts dt { font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-top: var(--space-4); }
+  .facts dd { margin: 0.15rem 0 0; }
+  .facts dd ul { list-style: none; padding: 0; margin: 0; font-size: var(--fs-sm); }
+  .facts dd li + li { margin-top: var(--space-2); }
+  .facts p { margin-bottom: var(--space-2); }
+  section { margin-top: var(--space-24); }
+  .intro { max-width: var(--max-text); }
+  .tech { display: grid; gap: 0; margin: 0; }
+  .tech > div { display: grid; gap: var(--space-2) var(--space-8); padding: var(--space-6) 0; border-bottom: 1px solid var(--border); }
+  @media (min-width: 48rem) { .tech > div { grid-template-columns: 14rem 1fr; } }
+  .tech dt { font-family: var(--font-display); font-weight: 650; font-size: var(--fs-lg); letter-spacing: -0.015em; }
+  .tech dd { margin: 0; }
+  .base { margin-bottom: var(--space-3); text-transform: none; letter-spacing: 0; }
+  .more-links { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-4); }
+  @media (min-width: 48rem) { .more-links { grid-template-columns: repeat(3, 1fr); } }
+  .more-links li { margin: 0; }
+  .more-links a { display: grid; gap: var(--space-1); height: 100%; padding: var(--space-6); border: 1px solid var(--border); border-radius: var(--radius-lg); text-decoration: none; color: var(--text); transition: border-color 0.18s var(--ease); }
+  .more-links a:hover { border-color: var(--border-strong); }
+  .more-links strong { font-family: var(--font-display); font-size: var(--fs-lg); letter-spacing: -0.015em; }
+  .more-links span { color: var(--text-muted); font-size: var(--fs-sm); }
 </style>

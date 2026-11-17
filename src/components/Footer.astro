@@ -1,32 +1,65 @@
 ---
+import Logo from './Logo.astro';
 import { perfil } from '@/data/perfil';
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
-  <div class="container inner">
-    <div>
-      <p class="who"><strong>{perfil.nombre}</strong> · {perfil.ubicacion}</p>
-      <p class="muted small">
-        Todo el material publicado procede de laboratorios propios y está saneado: sin contraseñas, claves ni datos de terceros.
-      </p>
+  <div class="container">
+    <div class="top">
+      <div class="who">
+        <a class="brand" href="/" aria-label="Inicio">
+          <Logo size={40} />
+        </a>
+        <p class="big">¿Hablamos?</p>
+        <p><a class="mail" href={`mailto:${perfil.email}`}>{perfil.email}</a></p>
+      </div>
+
+      <nav class="cols" aria-label="Pie de página">
+        <div>
+          <p class="label">Trabajo</p>
+          <ul>
+            <li><a href="/proyectos/">Proyectos</a></li>
+            <li><a href="/ciberseguridad/">Laboratorios</a></li>
+            <li><a href="/documentacion/">Documentación</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="label">Perfil</p>
+          <ul>
+            <li><a href="/experiencia/">Experiencia</a></li>
+            <li><a href="/sobre-mi/">Sobre mí</a></li>
+            <li><a href="/formacion/">Formación</a></li>
+            <li><a href="/competencias/">Competencias</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="label">Fuera de aquí</p>
+          <ul>
+            <li><a href={perfil.github} rel="me noopener">GitHub</a></li>
+            <li><a href={perfil.linkedin} rel="me noopener">LinkedIn</a></li>
+            {perfil.cv && <li><a href={perfil.cv} download>CV (PDF)</a></li>}
+          </ul>
+        </div>
+      </nav>
     </div>
-    <ul class="links">
-      <li><a href={`mailto:${perfil.email}`}>Correo</a></li>
-      <li><a href={perfil.github} rel="me noopener">GitHub</a></li>
-      <li><a href={perfil.linkedin} rel="me noopener">LinkedIn</a></li>
-      <li><a href={perfil.cv} download>CV (PDF)</a></li>
-    </ul>
+    <p class="copy">
+      © {year} {perfil.nombre} · {perfil.ubicacion}. El material de laboratorio está saneado: sin contraseñas, claves ni datos de terceros.
+    </p>
   </div>
-  <p class="container muted small copy">© {year} {perfil.nombre}</p>
 </footer>
 
 <style>
-  .site-footer { border-top: 1px solid var(--border); margin-top: var(--space-16); padding-block: var(--space-8); background: var(--surface); }
-  .inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-6); }
-  .inner > div { max-width: 36rem; }
-  .who { margin-bottom: var(--space-2); }
-  .links { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: var(--space-4); }
-  .links li { margin: 0; }
-  .copy { margin-top: var(--space-6); margin-bottom: 0; }
+  .site-footer { margin-top: var(--space-24); border-top: 1px solid var(--border-strong); padding-block: var(--space-12) var(--space-8); }
+  .top { display: grid; gap: var(--space-12); }
+  @media (min-width: 52rem) { .top { grid-template-columns: 1fr 1.2fr; } }
+  .brand { display: inline-block; color: var(--text); margin-bottom: var(--space-4); }
+  .big { font-family: var(--font-display); font-weight: 650; font-size: var(--fs-xl); letter-spacing: -0.025em; line-height: 1.1; margin-bottom: var(--space-2); }
+  .mail { font-family: var(--font-mono); font-size: var(--fs-sm); overflow-wrap: anywhere; }
+  .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr)); gap: var(--space-8); }
+  .cols ul { list-style: none; padding: 0; margin: 0; }
+  .cols li { margin: 0 0 var(--space-2); }
+  .cols a { color: var(--text); text-decoration: none; }
+  .cols a:hover { color: var(--accent); text-decoration: underline; }
+  .copy { margin: var(--space-12) 0 0; padding-top: var(--space-4); border-top: 1px solid var(--border); font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-muted); }
 </style>

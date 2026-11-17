@@ -1,0 +1,58 @@
+---
+import Base from '@/layouts/Base.astro';
+import ProjectFeature from '@/components/ProjectFeature.astro';
+import ProjectRow from '@/components/ProjectRow.astro';
+import { TIPOS } from '@/data/taxonomia';
+import { porArea } from '@/lib/proyectos';
+
+const lista = await porArea('desarrollo');
+const destacados = lista.filter((p) => p.data.destacado);
+const otros = lista.filter((p) => !p.data.destacado);
+const [principal, ...resto] = destacados;
+---
+
+<Base title="Proyectos" description="Proyectos de desarrollo web y software: una herramienta propia de análisis de seguridad, webs publicadas para un negocio real y un proyecto editorial, y el proyecto final de DAM.">
+  <div class="container page">
+    <header class="prose">
+      <p class="eyebrow">Desarrollo web y software</p>
+      <h1>Proyectos</h1>
+      <p class="lead">
+        Webs en producción, una herramienta propia y trabajos de formación. En cada uno indico qué es
+        ({Object.values(TIPOS).slice(0, 3).join(', ').toLowerCase()}), cuál fue mi papel y qué se puede comprobar.
+      </p>
+    </header>
+
+    <div class="features">
+      {principal && <ProjectFeature proyecto={principal} variante="wide" indice="01" headingLevel="h2" prioridad />}
+      {resto.map((p, i) => <ProjectFeature proyecto={p} variante="wide" indice={`0${i + 2}`} headingLevel="h2" />)}
+    </div>
+
+    {
+      otros.length > 0 && (
+        <section aria-labelledby="otros">
+          <div class="section-head">
+            <span class="num">+</span>
+            <h2 id="otros">Otros proyectos</h2>
+          </div>
+          <ul class="rows">
+            {otros.map((p) => <ProjectRow proyecto={p} />)}
+          </ul>
+        </section>
+      )
+    }
+
+    <aside class="next">
+      <p class="label">También</p>
+      <p class="big">Los laboratorios de ciberseguridad tienen su propio índice.</p>
+      <a class="btn" href="/ciberseguridad/">Ver laboratorios <span class="arrow" aria-hidden="true">→</span></a>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .features { display: grid; gap: var(--space-16); margin-block: var(--space-16); }
+  .features > :global(* + *) { padding-top: var(--space-16); border-top: 1px solid var(--border); }
+  .rows { list-style: none; padding: 0; margin: 0; }
+  .next { margin-top: var(--space-16); padding: var(--space-8); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); }
+  .big { font-family: var(--font-display); font-weight: 650; font-size: var(--fs-xl); letter-spacing: -0.025em; line-height: 1.15; max-width: 30rem; }
+</style>

@@ -21,16 +21,18 @@ const info = ESTADOS[estado];
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 0.15rem 0.6rem 0.15rem 0.2rem;
-    border-radius: 999px;
-    white-space: nowrap;
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 500;
+    padding: 0.2rem 0.6rem 0.2rem 0.25rem;
+    border-radius: 4px;
+    line-height: 1.25;
   }
   .letter {
+    flex: none;
     display: grid; place-items: center;
     width: 1.25rem; height: 1.25rem;
-    border-radius: 999px;
+    border-radius: 3px;
     font-size: 0.7rem;
     background: currentColor;
   }

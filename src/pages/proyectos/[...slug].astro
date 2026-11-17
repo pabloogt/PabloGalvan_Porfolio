@@ -1,5 +1,6 @@
 ---
 import { render } from 'astro:content';
+import { Image } from 'astro:assets';
 import Base from '@/layouts/Base.astro';
 import EstadoBadge from '@/components/EstadoBadge.astro';
 import Evidencia from '@/components/Evidencia.astro';
@@ -18,9 +19,10 @@ const { proyecto } = Astro.props;
 const d = proyecto.data;
 const { Content } = await render(proyecto);
 const hayProcedimiento = proyecto.body?.trim().length;
+const tituloCuerpo = d.area === 'desarrollo' ? 'En detalle' : 'Procedimiento';
 const diagramas = d.evidencias.filter((e) => e.tipo === 'diagrama');
 const capturas = d.evidencias.filter((e) => e.tipo !== 'diagrama');
-const volver = d.area === 'ciberseguridad' ? { href: '/ciberseguridad/', texto: 'Ciberseguridad' } : { href: '/desarrollo/', texto: 'Desarrollo' };
+const volver = d.area === 'ciberseguridad' ? { href: '/ciberseguridad/', texto: 'Laboratorios' } : { href: '/proyectos/', texto: 'Proyectos' };
 
 // Proyectos relacionados: misma categoría.
 const relacionados = (await todos()).filter((p) => p.data.categoria === d.categoria && p.id !== proyecto.id).slice(0, 3);
@@ -30,7 +32,7 @@ const indice = [
   d.contexto && ['contexto', 'Contexto y objetivo'],
   d.problema && ['problema', 'Problema técnico'],
   (d.arquitectura || diagramas.length || d.entorno.length) && ['arquitectura', 'Entorno y arquitectura'],
-  hayProcedimiento && ['procedimiento', 'Procedimiento'],
+  hayProcedimiento && ['procedimiento', tituloCuerpo],
   d.problemas.length && ['problemas', 'Problemas encontrados'],
   d.decisiones.length && ['decisiones', 'Decisiones técnicas'],
   d.resultados.length && ['resultados', 'Resultados verificados'],
@@ -49,14 +51,32 @@ const indice = [
     </nav>
 
     <header class="head">
+      <p class="eyebrow">{TIPOS[d.tipo]}</p>
       <h1>{d.titulo}</h1>
       <p class="lead">{d.resumen}</p>
-      <ul class="facts" aria-label="Datos del proyecto">
-        <li><span class="k">Tipo</span> {TIPOS[d.tipo]}</li>
-        {d.fecha && <li><span class="k">Fecha</span> {d.fecha}</li>}
-        <li><span class="k">Estado</span> <EstadoBadge estado={d.estado} /></li>
-      </ul>
+      {
+        (d.web || d.repo) && (
+          <div class="btn-row actions">
+            {d.web && <a class="btn btn-primary" href={d.web} rel="noopener">Visitar la web <span class="arrow" aria-hidden="true">↗</span></a>}
+            {d.repo && <a class="btn" href={d.repo} rel="noopener">Código en GitHub <span class="arrow" aria-hidden="true">↗</span></a>}
+          </div>
+        )
+      }
+      <dl class="facts">
+        {d.rol && <div class="wide"><dt>Mi papel</dt><dd>{d.rol}</dd></div>}
+        {d.fecha && <div><dt>Fecha</dt><dd>{d.fecha}</dd></div>}
+        <div><dt>Categoría</dt><dd>{CATEGORIAS[d.categoria]}</dd></div>
+        <div><dt>Evidencia</dt><dd><EstadoBadge estado={d.estado} /></dd></div>
+      </dl>
     </header>
+
+    {
+      d.portada && (
+        <figure class="cover">
+          <Image src={d.portada} alt={d.portadaAlt ?? ''} widths={[640, 1000, 1440]} sizes="(max-width: 76rem) 100vw, 76rem" format="webp" loading="eager" />
+        </figure>
+      )
+    }
 
     {
       d.pendiente.length > 0 && (
@@ -134,7 +154,7 @@ const indice = [
         {
           hayProcedimiento && (
             <section id="procedimiento" class="md">
-              <h2>Procedimiento</h2>
+              <h2>{tituloCuerpo}</h2>
               <Content />
             </section>
           )
@@ -228,15 +248,20 @@ const indice = [
 </Base>
 
 <style>
-  .ficha { padding-top: var(--space-8); }
-  .crumbs { color: var(--text-muted); margin-bottom: var(--space-6); }
+  .ficha { padding-top: var(--space-12); }
+  .crumbs { color: var(--text-muted); margin-bottom: var(--space-8); font-family: var(--font-mono); font-size: var(--fs-xs); }
   .crumbs a { color: var(--text-muted); }
-  .head { max-width: 52rem; margin-bottom: var(--space-8); }
-  .facts { list-style: none; padding: 0; margin: var(--space-6) 0 0; display: flex; flex-wrap: wrap; gap: var(--space-3) var(--space-8); }
-  .facts li { margin: 0; display: flex; align-items: center; gap: var(--space-2); }
-  .k { font-size: var(--fs-sm); color: var(--text-muted); }
+  .head { max-width: 58rem; margin-bottom: var(--space-12); }
+  .head h1 { overflow-wrap: break-word; }
+  .actions { margin-top: var(--space-6); }
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: var(--space-4) var(--space-8); margin: var(--space-8) 0 0; padding-top: var(--space-6); border-top: 1px solid var(--border-strong); }
+  .facts .wide { grid-column: 1 / -1; max-width: var(--max-text); }
+  .facts dt { font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.2rem; }
+  .facts dd { margin: 0; }
+  .cover { margin: 0 0 var(--space-16); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); overflow: hidden; }
+  .cover :global(img) { width: 100%; height: auto; }
   .aviso {
-    border: 1px solid var(--st-b);
+    border: 1px dashed var(--st-b);
     background: var(--st-b-bg);
     border-radius: var(--radius);
     padding: var(--space-4) var(--space-6);
@@ -246,13 +271,12 @@ const indice = [
   .aviso ul { margin: var(--space-2) 0 0; }
   .layout { display: grid; gap: var(--space-8); grid-template-columns: minmax(0, 1fr); }
   .body { min-width: 0; }
-  .head h1 { overflow-wrap: break-word; hyphens: auto; }
   @media (min-width: 64rem) {
     .layout { grid-template-columns: 16rem minmax(0, 1fr); gap: var(--space-12); }
     .side { position: sticky; top: 5.5rem; align-self: start; max-height: calc(100vh - 7rem); overflow-y: auto; }
   }
   .side { display: flex; flex-direction: column; gap: var(--space-6); }
-  .side-title { font-size: var(--fs-sm); font-weight: 600; color: var(--text-muted); margin-bottom: var(--space-2); }
+  .side-title { font-family: var(--font-mono); font-size: var(--fs-xs); text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: var(--space-3); }
   .toc ol { padding-left: 1.1rem; margin: 0; font-size: var(--fs-sm); }
   .toc a { color: var(--text); text-decoration: none; }
   .toc a:hover { color: var(--accent); text-decoration: underline; }

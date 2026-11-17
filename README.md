@@ -12,6 +12,7 @@ Web estática con mis proyectos de ciberseguridad, sistemas, redes y desarrollo.
 | `astro:assets` + sharp | Capturas convertidas a WebP en varios tamaños |
 | `@astrojs/sitemap` | `sitemap-index.xml`; `robots.txt` generado |
 | CSS nativo con variables | `src/styles/global.css`; modo claro y oscuro automático |
+| Fontsource (autoalojadas) | Bricolage Grotesque, Instrument Sans y JetBrains Mono, sin peticiones a terceros |
 
 Sin React, Tailwind, base de datos, backend ni scripts de terceros. El único JavaScript es el que abre y cierra el menú en móvil.
 
@@ -40,16 +41,16 @@ npm run dev        # http://localhost:4321
 src/
   content.config.ts        Esquema de las fichas (qué campos existen y cuáles son obligatorios)
   content/proyectos/*.md   Una ficha por proyecto; el nombre del fichero es la URL
-  data/perfil.ts           Datos personales, formación, evaluaciones y tecnologías
+  data/perfil.ts           Datos personales, experiencia, formación, evaluaciones y tecnologías
   data/taxonomia.ts        Categorías, tipos, estados A–D y competencias
   assets/evidencias/       Capturas saneadas, una carpeta por proyecto
   assets/diagramas/        Diagramas reconstruidos (SVG)
-  components/              Cabecera, pie, tarjeta, insignia de estado, figura de evidencia
+  assets/portadas/         Capturas de portada de los proyectos con web pública
+  components/              Logo, cabecera, pie, figura del inicio, tarjeta destacada, fila de índice, insignia de estado, evidencia
   layouts/Base.astro       HTML base, SEO, Open Graph y JSON-LD
-  pages/                   Inicio, áreas, ficha dinámica, documentación, competencias, formación, sobre mí
+  pages/                   Inicio, proyectos, laboratorios, ficha dinámica, experiencia, sobre mí, contacto, documentación, competencias, formación
 public/
   documentos/              PDF saneados (nunca los originales)
-  cv/                      CV público (sin teléfono)
 scripts/                   Comprobación de enlaces y de secretos
 tests/                     Tests de contenido con node:test
 docs/                      Guía de mantenimiento
@@ -64,7 +65,13 @@ INVENTARIO_EVIDENCIAS.md   Qué documento respalda cada ficha y qué falta
 2. Añade la variable de entorno `SITE_URL` con la URL definitiva (por ejemplo, `https://tu-dominio.com`). Se usa para las URL canónicas y el sitemap.
 3. Despliega.
 
-Nada se ha desplegado todavía.
+## Identidad visual
+
+«Cuaderno técnico»: papel cálido, tinta casi negra y un único acento terracota; titulares en Bricolage Grotesque, texto en Instrument Sans y etiquetas en JetBrains Mono, como las anotaciones de un plano. Todo se controla desde las variables de `src/styles/global.css`. La auditoría y las decisiones de diseño están en [docs/AUDITORIA_Y_REDISENO.md](docs/AUDITORIA_Y_REDISENO.md).
+
+## CV
+
+El botón de descarga solo aparece si `perfil.cv` tiene una ruta en `src/data/perfil.ts`. Ahora está en `null` porque falta un CV actualizado.
 
 ## Mantenimiento
 

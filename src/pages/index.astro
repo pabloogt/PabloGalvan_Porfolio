@@ -1,105 +1,144 @@
 ---
 import Base from '@/layouts/Base.astro';
-import ProjectCard from '@/components/ProjectCard.astro';
-import { perfil } from '@/data/perfil';
+import HeroFigure from '@/components/HeroFigure.astro';
+import ProjectFeature from '@/components/ProjectFeature.astro';
+import ProjectRow from '@/components/ProjectRow.astro';
+import { perfil, experiencia, tecnologias } from '@/data/perfil';
 import { todos } from '@/lib/proyectos';
 
 const lista = await todos();
-const destacadosCiber = lista.filter((p) => p.data.destacado && p.data.area === 'ciberseguridad');
-const destacadosDev = lista.filter((p) => p.data.destacado && p.data.area === 'desarrollo');
-const totales = {
-  ciber: lista.filter((p) => p.data.area === 'ciberseguridad' && p.data.estado !== 'D').length,
-  dev: lista.filter((p) => p.data.area === 'desarrollo' && p.data.estado !== 'D').length,
-};
+const dev = lista.filter((p) => p.data.area === 'desarrollo' && p.data.destacado);
+const [principal, ...resto] = dev;
+const labs = lista.filter((p) => p.data.area === 'ciberseguridad' && p.data.destacado).slice(0, 5);
+const totalLabs = lista.filter((p) => p.data.area === 'ciberseguridad' && p.data.estado !== 'D').length;
 ---
 
-<Base title={perfil.nombre} description={`${perfil.titular}. ${perfil.objetivo}`}>
-  <section class="hero container">
-    <p class="eyebrow">Portfolio técnico</p>
-    <h1>{perfil.nombre}</h1>
-    <p class="role">{perfil.titular}</p>
-    <p class="lead">{perfil.descripcion}</p>
-    <p class="objective"><strong>Qué busco.</strong> {perfil.objetivo}</p>
-    <div class="btn-row">
-      <a class="btn btn-primary" href="/ciberseguridad/">Ver laboratorios de ciberseguridad</a>
-      <a class="btn" href={perfil.cv} download>Descargar CV (PDF)</a>
-      <a class="btn" href={perfil.github} rel="noopener">GitHub</a>
-      <a class="btn" href={`mailto:${perfil.email}`}>Contacto</a>
-    </div>
-    <p class="muted small meta">{perfil.ubicacion} · {perfil.disponibilidad}</p>
-  </section>
-
-  <section class="section container" aria-labelledby="como-leer">
-    <h2 id="como-leer" class="first">Cómo leer este portfolio</h2>
-    <div class="grid read">
-      <div>
-        <p>
-          Cada proyecto tiene una ficha con el contexto, la arquitectura, el procedimiento, los problemas encontrados, lo que se verificó y lo que no.
-          Las afirmaciones se apoyan en capturas e informes originales, saneados para su publicación.
-        </p>
+<Base title={perfil.nombre} description={perfil.descripcion}>
+  <section class="hero dotgrid">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <p class="eyebrow reveal">{perfil.titular} · Madrid</p>
+        <h1 class="reveal reveal-2">
+          {perfil.hero.linea1}
+          <span class="accent">{perfil.hero.linea2}</span>
+        </h1>
+        <p class="lead reveal reveal-3">{perfil.hero.texto}</p>
+        <div class="btn-row reveal reveal-4">
+          <a class="btn btn-primary" href="/proyectos/">Ver proyectos <span class="arrow" aria-hidden="true">→</span></a>
+          <a class="btn" href="/sobre-mi/">Conocer mi perfil</a>
+          {perfil.cv && <a class="btn" href={perfil.cv} download>Descargar CV</a>}
+          <a class="btn" href="/contacto/">Contactar</a>
+        </div>
+        <p class="status reveal reveal-4"><span class="dot" aria-hidden="true"></span>{perfil.disponibilidad} · {perfil.idiomas}</p>
       </div>
-      <ul class="legend">
-        <li><strong>A</strong> · Implementado y documentado</li>
-        <li><strong>B</strong> · Implementado, con evidencias parciales</li>
-        <li><strong>C</strong> · Estudiado o preparado en formación</li>
-        <li><strong>D</strong> · Pendiente de recuperar documentación</li>
-      </ul>
+      <div class="hero-figure-wrap">
+        <HeroFigure />
+      </div>
     </div>
   </section>
 
-  <section class="section container" aria-labelledby="ciber">
+  <section class="section container" aria-labelledby="proyectos">
     <div class="section-head">
-      <h2 id="ciber">Ciberseguridad destacada</h2>
-      <a href="/ciberseguridad/">Los {totales.ciber} trabajos documentados →</a>
+      <span class="num">01</span>
+      <h2 id="proyectos">Proyectos</h2>
+      <a class="more link-arrow" href="/proyectos/">Todos los proyectos</a>
     </div>
-    <div class="grid grid-cards">
-      {destacadosCiber.map((p) => <ProjectCard proyecto={p} />)}
+    {principal && <ProjectFeature proyecto={principal} variante="wide" indice="01" prioridad />}
+    <div class="two">
+      {resto.slice(0, 2).map((p, i) => <ProjectFeature proyecto={p} indice={`0${i + 2}`} />)}
     </div>
+    {resto[2] && <div class="last"><ProjectFeature proyecto={resto[2]} variante="wide" indice="04" /></div>}
   </section>
 
-  <section class="section container" aria-labelledby="dev">
+  <section class="section container" aria-labelledby="labs">
     <div class="section-head">
-      <h2 id="dev">Desarrollo destacado</h2>
-      <a href="/desarrollo/">Los {totales.dev} proyectos →</a>
+      <span class="num">02</span>
+      <h2 id="labs">Laboratorios de ciberseguridad</h2>
+      <a class="more link-arrow" href="/ciberseguridad/">Los {totalLabs} documentados</a>
     </div>
-    <div class="grid grid-cards">
-      {destacadosDev.map((p) => <ProjectCard proyecto={p} />)}
+    <p class="intro">
+      Cada laboratorio tiene una ficha con la arquitectura, el procedimiento, las capturas y también lo que no quedó demostrado.
+      La letra indica el grado de evidencia: <strong>A</strong> documentado, <strong>B</strong> con evidencias parciales, <strong>C</strong> estudiado.
+    </p>
+    <ul class="rows">
+      {labs.map((p) => <ProjectRow proyecto={p} />)}
+    </ul>
+  </section>
+
+  <section class="section band">
+    <div class="container">
+      <div class="section-head">
+        <span class="num">03</span>
+        <h2 id="experiencia">Experiencia</h2>
+        <a class="more link-arrow" href="/experiencia/">Ver detalle</a>
+      </div>
+      <ol class="xp">
+        {
+          experiencia.map((e) => (
+            <li>
+              <p class="label">{e.periodo}</p>
+              <h3>{e.empresa}</h3>
+              <p class="muted">{e.puesto}</p>
+              <ul class="tags">{e.tecnologias.map((t) => <li><span class="tag">{t}</span></li>)}</ul>
+            </li>
+          ))
+        }
+      </ol>
     </div>
   </section>
 
   <section class="section container" aria-labelledby="tec">
-    <h2 id="tec">Tecnologías con las que he trabajado</h2>
-    <p class="muted">Solo herramientas usadas en proyectos o laboratorios documentados. Sin niveles ni porcentajes: los proyectos muestran el uso real.</p>
+    <div class="section-head">
+      <span class="num">04</span>
+      <h2 id="tec">Tecnologías</h2>
+      <a class="more link-arrow" href="/competencias/">Competencias y proyectos que las respaldan</a>
+    </div>
     <dl class="tech">
       {
-        Object.entries(perfil.tecnologias).map(([grupo, items]) => (
+        tecnologias.map((g) => (
           <div>
-            <dt>{grupo}</dt>
+            <dt>{g.grupo}</dt>
             <dd>
-              <ul class="tags">{items.map((t) => <li><span class="tag">{t}</span></li>)}</ul>
+              <p class="label base">{g.base}</p>
+              <ul class="tags">{g.items.map((t) => <li><span class="tag">{t}</span></li>)}</ul>
             </dd>
           </div>
         ))
       }
     </dl>
-    <p><a href="/competencias/">Competencias demostradas y proyectos que las respaldan →</a></p>
   </section>
 </Base>
 
 <style>
-  .hero { padding-block: var(--space-16) var(--space-12); }
-  .hero h1 { margin-bottom: var(--space-2); }
-  .role { font-size: var(--fs-lg); font-weight: 600; color: var(--accent); margin-bottom: var(--space-6); }
-  .objective { max-width: var(--max-text); margin-bottom: var(--space-8); }
-  .meta { margin-top: var(--space-6); }
-  .first { margin-top: 0; }
-  .section h2 { margin-top: 0; }
-  .read { grid-template-columns: 1fr; align-items: start; }
-  @media (min-width: 48rem) { .read { grid-template-columns: 3fr 2fr; } }
-  .legend { list-style: none; padding: var(--space-4) var(--space-6); margin: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); font-size: var(--fs-sm); }
-  .section-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-6); margin-bottom: var(--space-6); }
-  .section-head h2 { margin: 0; }
-  .tech { display: grid; gap: var(--space-6); grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); margin: 0 0 var(--space-6); }
-  .tech dt { font-weight: 600; margin-bottom: var(--space-2); }
+  .hero { border-bottom: 1px solid var(--border-strong); }
+  .hero-grid { display: grid; gap: var(--space-12); padding-block: var(--space-16) var(--space-16); align-items: center; }
+  @media (min-width: 64rem) { .hero-grid { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); padding-block: var(--space-24); } }
+  h1 { font-size: var(--fs-hero); line-height: 0.98; letter-spacing: -0.04em; margin-bottom: var(--space-6); }
+  h1 .accent { display: block; color: var(--accent); }
+  .lead { margin-bottom: var(--space-8); color: var(--text); }
+  .status { display: flex; align-items: center; gap: var(--space-2); margin: var(--space-8) 0 0; font-family: var(--font-mono); font-size: var(--fs-xs); color: var(--text-muted); }
+  .dot { width: 0.55rem; height: 0.55rem; border-radius: 50%; background: var(--st-a); flex: none; }
+  .hero-figure-wrap { display: none; }
+  @media (min-width: 44rem) { .hero-figure-wrap { display: block; max-width: 36rem; } }
+
+  .two { display: grid; gap: var(--space-12) var(--space-8); margin-top: var(--space-16); }
+  @media (min-width: 52rem) { .two { grid-template-columns: 1fr 1fr; } }
+  .last { margin-top: var(--space-16); padding-top: var(--space-12); border-top: 1px solid var(--border); }
+
+  .intro { max-width: var(--max-text); color: var(--text-muted); margin-bottom: var(--space-4); }
+  .rows { list-style: none; padding: 0; margin: 0; border-top: 1px solid var(--border); }
+
+  .band { background: var(--surface); border-block: 1px solid var(--border); }
+  .xp { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-8); }
+  @media (min-width: 48rem) { .xp { grid-template-columns: 1fr 1fr; gap: var(--space-12); } }
+  .xp > li { margin: 0; padding-left: var(--space-6); border-left: 2px solid var(--accent); }
+  .xp h3 { margin: 0 0 var(--space-1); font-size: var(--fs-xl); }
+  .xp .muted { margin-bottom: var(--space-4); }
+
+  .tech { display: grid; gap: 0; margin: 0; }
+  .tech > div { display: grid; gap: var(--space-2) var(--space-8); padding: var(--space-6) 0; border-bottom: 1px solid var(--border); }
+  @media (min-width: 48rem) { .tech > div { grid-template-columns: 14rem 1fr; } }
+  .tech dt { font-family: var(--font-display); font-weight: 650; font-size: var(--fs-lg); letter-spacing: -0.015em; }
   .tech dd { margin: 0; }
+  .base { margin-bottom: var(--space-3); text-transform: none; letter-spacing: 0; }
 </style>

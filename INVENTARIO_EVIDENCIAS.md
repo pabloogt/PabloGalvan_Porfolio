@@ -1,6 +1,6 @@
 # Inventario de evidencias
 
-Actualizado el 15/11/2026 con la documentación de `Documents/ESCIB`. Los originales permanecen fuera del proyecto; en `public/` solo hay copias saneadas.
+Actualizado el 16/11/2026 con las carpetas `ESCIB/Bastionado`, `Incidentes`, `HE` y `PPS`. Los originales permanecen fuera del proyecto; en `public/` solo hay copias saneadas.
 
 Clasificación: **A** implementado y documentado · **B** implementado, evidencias parciales · **C** estudiado o preparado · **D** pendiente de recuperar.
 
@@ -24,7 +24,6 @@ Clasificación: **A** implementado y documentado · **B** implementado, evidenci
 | `pegasus-mvt` | B | `ESCIB/PPS/Trabajo_Pegasus_Grupal.pdf` | Solo ficha | Trabajo en grupo de cuatro personas. |
 | `cifrado-gpg-openssl` | B | `ESCIB/Galvan_Tejada_Pablo_BRS_CifradoAsimetrico_Tarea.pdf` | Solo ficha | **El informe contiene la frase de paso usada**: no publicar sin sanear. |
 | `android-jadx-mobsf` | D | — | Ficha pendiente | No encontrado. |
-| `ddos-ataques-web-packet-tracer` | D | — | Ficha pendiente | No encontrado (el `.pkt` de `ESCIB/Bastionado/trabajo.pkt` podría ser el de la red segura: revisar). |
 | `dns-cdn-cloudflare` | D | — | Ficha pendiente | No encontrado. |
 
 ### Material revisado y no usado
@@ -45,9 +44,8 @@ Clasificación: **A** implementado y documentado · **B** implementado, evidenci
 |---|---|---|---|
 | `webtrustscan` | A | `PROYECTOS/web-audit-app` (repo público) | 324/324 tests verificados el 15/11/2026. No desplegado. |
 | `pill-express` | A | `Documents/GitHub/TFG_DAM` (repo público) | **El repositorio público contiene la clave de Google Maps**: restringirla o rotarla. |
-| `cuimo-financiacion` | B | CV | Confirmar permiso para mostrar más detalle. |
-| `atisa-gestion-usuarios` | B | CV, `Documents/ProyectosAtisa` | Confirmar el stack de la aplicación CRUD. |
-| `piscinas-fama` | B | CV | Falta enlace a la web y permiso. |
+| `piscinas-fama` | A | Web pública https://www.piscinasfama.com/ (analizada el 16/11/2026) | WordPress, Blocksy, Spectra, Rank Math, Fluent Forms, Complianz: detectados en el HTML público. Portada: captura propia de la web. |
+| `termlifepicks` | A | Web pública https://termlifepicks.com/ (analizada el 16/11/2026) | WordPress, tema Extendable, Rank Math, Site Kit. Sin datos de tráfico ni ingresos. No se afirma aprobación de AdSense. |
 | `tcg-radar` | B | `PROYECTOS/tcg-radar` | Proyecto privado en desarrollo. |
 | `simulador-bancario-cobol` | D | CV | No hay código local. |
 
@@ -61,5 +59,47 @@ Clasificación: **A** implementado y documentado · **B** implementado, evidenci
 | `public/documentos/bastionado-ssh.pdf` | BRS09 | Nombre del profesor, metadatos |
 | `public/documentos/red-segura-packet-tracer.pdf` | BRSLabUD5 | Profesor, clave precompartida (4 apariciones), metadatos |
 | `public/documentos/wazuh-suricata-pfsense.pdf` | BRS Lab3 | Contraseña del dashboard, 2 capturas con claves del agente, credenciales de DVWA, metadatos |
-| `public/cv/CV_Pablo_Galvan_Tejada.pdf` | `CVs/CV_Pablo_Galvan_Analista_SOC_N1_Serval.pdf` | Teléfono, metadatos (incluido el nombre de la empresa del fichero) |
 | `src/assets/evidencias/**` (21 capturas) | Extraídas de los PDF anteriores | Revisadas una a una: solo IP privadas de laboratorio y usuarios de prueba |
+
+## Cambios del 16/11/2026
+
+### Retirado
+
+| Elemento | Motivo |
+|---|---|
+| Ficha `cuimo-financiacion` y su enlace externo | Sin autorización para mostrar ese trabajo. Las prácticas siguen en Experiencia, con tareas generales. |
+| Ficha `atisa-gestion-usuarios` | Pasa a Experiencia (el stack de la ficha no estaba confirmado). |
+| Ficha pendiente `ddos-ataques-web-packet-tracer` | Sustituida por `analisis-logs-ddos-ataques-web`, que sí tiene documento. Si la práctica de Packet Tracer era otra distinta, sigue sin localizarse. |
+| CV público | No estaba actualizado (perfil SOC, inglés «intermedio»). Falta un CV nuevo. |
+
+### Fichas nuevas a partir de las carpetas
+
+| Ficha | Estado | Documento fuente (fuera del proyecto) | Observaciones |
+|---|---|---|---|
+| `analisis-logs-ddos-ataques-web` | B | `ESCIB/galvan_pablo_BRS07_Tarea.pdf` | Contiene IP públicas del conjunto de datos: no publicado. |
+| `investigacion-respuesta-incidentes` | B | `ESCIB/Galvan_Pablo_IC03_Tarea.pdf`, `Galván_Pablo_IC05_Tarea.pdf`, `Galvan_Pablo_IC04_Tarea.pdf` | IC03 incluye el análisis del USB con Autopsy (caso `Incidentes/Analisis_USB_ACME`). |
+| `nmap-openvas-reconocimiento` | B | `ESCIB/HE/Galvan_Tejada_Pablo_OpenVas_NMAP.pdf` | OpenVAS no llegó a ejecutarse (feeds sin sincronizar). |
+| `captura-trafico-sniffers` | B | `ESCIB/pablo_galvan_sniffer.pdf` | **Contiene la contraseña del usuario FTP de prueba.** |
+| `metasploit-arp-spoofing` | B | `ESCIB/Galvan_Pablo_UD2_ACT1_Metaexploit.pdf` | FOCA sin resultados. |
+| `bastionado-linux-servicios` | B | `ESCIB/Galvan_Tejada_Pablo_BRS_Lab01_Tarea.pdf`, `BRS_Lab2`, `BRS04` | **BRS04 contiene el secreto compartido de RADIUS.** |
+| `plan-director-analisis-riesgos` | C | `ESCIB/Galvan_Tejada_Pablo_BRS_PDS_Tarea.pdf`, `Incidentes/Galvan_Tejada_Pablo_IC02_Tarea.pdf`, `Galvan_Pablo_BRS06_Tarea.pdf`, `PabloGalvan_BRS01` | Empresas ficticias. |
+| `revision-codigo-seguro` | C | `ESCIB/galvan_pablo_PPS2_2.pdf` | Ejercicio de análisis. |
+
+### Revisado y no incorporado
+
+| Material | Motivo |
+|---|---|
+| `Incidentes/quasar-clone`, `Quasar-master`, `galvan_tejada_pablo_IC_Rats_Tarea.pdf` | Práctica con un troyano de acceso remoto: no aporta a la candidatura y es sensible. |
+| `galvan_tejada_pablo_IC_Medusa_Tarea.pdf`, `IC_Conffirewall`, `Galvan_Pablo_BRS05_Tarea.pdf` | Solapan con fichas existentes. |
+| `HackingEtico_Rafa_Pablo.pdf` (post-explotación y MITRE ATT&CK, en pareja) | Candidato a ficha futura; es trabajo compartido. |
+| `PPS/Galvan_Pablo_PPS_2_4.pdf`, `PPS/Galvan_Pablo_PPS_ejercicios2` | Teoría y ejercicios básicos de Python. |
+| `PPS/Exposicion_PPS_3er+trimestre_practica.pdf`, materiales de Diego y apuntes del profesorado | No son de mi autoría. |
+| Papelo (`PROYECTOS/SAAS`) | Sin auditar ni validar: no se incorpora. |
+
+### Recursos nuevos publicados
+
+| Fichero | Origen |
+|---|---|
+| `src/assets/portadas/piscinasfama.png`, `termlifepicks.png` | Capturas propias de las webs públicas, recortadas sin el banner de cookies. |
+| `public/og.png` | Captura del inicio del propio portfolio. |
+| `public/favicon.svg`, `src/components/Logo.astro` | Monograma PG, diseño propio. |

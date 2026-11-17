@@ -1,0 +1,69 @@
+---
+import { ESTADOS } from '@/data/taxonomia';
+import { urlProyecto, type Proyecto } from '@/lib/proyectos';
+
+/** Fila de índice: para listados largos (laboratorios) en lugar de una rejilla de tarjetas. */
+interface Props {
+  proyecto: Proyecto;
+  headingLevel?: 'h2' | 'h3';
+}
+const { proyecto, headingLevel = 'h3' } = Astro.props;
+const d = proyecto.data;
+const Heading = headingLevel;
+const estado = ESTADOS[d.estado];
+---
+
+<li class="row">
+  <span class={`state st-${d.estado.toLowerCase()}`} title={estado.descripcion}>
+    <span aria-hidden="true">{d.estado}</span>
+    <span class="visually-hidden">Estado {d.estado}: {estado.etiqueta}.</span>
+  </span>
+  <div class="main">
+    <Heading class="title"><a href={urlProyecto(proyecto)}>{d.titulo}</a></Heading>
+    <p class="summary">{d.resumen}</p>
+  </div>
+  <ul class="tags" aria-label="Herramientas">
+    {d.herramientas.slice(0, 4).map((h) => <li><span class="tag">{h}</span></li>)}
+  </ul>
+  <span class="go" aria-hidden="true">→</span>
+</li>
+
+<style>
+  .row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--space-2) var(--space-4);
+    padding: var(--space-6) 0;
+    margin: 0;
+    border-bottom: 1px solid var(--border);
+    transition: background-color 0.2s var(--ease), padding 0.2s var(--ease);
+  }
+  .row:hover { background: var(--surface); }
+  @media (min-width: 60rem) {
+    .row { grid-template-columns: 2rem minmax(0, 1.5fr) minmax(0, 1fr) 1.5rem; align-items: start; gap: var(--space-6); padding-inline: var(--space-3); }
+  }
+  .state {
+    display: grid; place-items: center;
+    width: 1.75rem; height: 1.75rem;
+    border-radius: 3px;
+    font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600;
+  }
+  .st-a { color: var(--st-a); background: var(--st-a-bg); }
+  .st-b { color: var(--st-b); background: var(--st-b-bg); }
+  .st-c { color: var(--st-c); background: var(--st-c-bg); }
+  .st-d { color: var(--st-d); background: var(--st-d-bg); }
+  .title { font-size: 1.2rem; margin: 0 0 var(--space-2); letter-spacing: -0.015em; line-height: 1.2; }
+  .title a { color: var(--text); text-decoration: none; }
+  /* Toda la fila es clicable sin anidar enlaces */
+  .title a::after { content: ''; position: absolute; inset: 0; }
+  .title a:focus-visible { outline: none; }
+  .row:has(a:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+  .row:hover .title a { color: var(--accent); }
+  .summary { color: var(--text-muted); font-size: var(--fs-sm); margin: 0; }
+  .tags { grid-column: 2; }
+  @media (min-width: 60rem) { .tags { grid-column: auto; justify-content: flex-end; } }
+  .go { display: none; font-family: var(--font-mono); color: var(--accent); transition: transform 0.2s var(--ease); }
+  @media (min-width: 60rem) { .go { display: block; } }
+  .row:hover .go { transform: translateX(4px); }
+</style>

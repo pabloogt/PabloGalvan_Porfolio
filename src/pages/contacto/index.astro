@@ -1,0 +1,66 @@
+---
+import Base from '@/layouts/Base.astro';
+import { perfil } from '@/data/perfil';
+
+const canales = [
+  { nombre: 'Correo', valor: perfil.email, href: `mailto:${perfil.email}`, nota: 'La forma más directa.' },
+  { nombre: 'LinkedIn', valor: 'pablo-galvan-tejada', href: perfil.linkedin, nota: 'Perfil profesional.' },
+  { nombre: 'GitHub', valor: 'pabloogt', href: perfil.github, nota: 'Código de los proyectos públicos.' },
+];
+---
+
+<Base title="Contacto" description={`Contacta con ${perfil.nombre}: correo, LinkedIn y GitHub. ${perfil.disponibilidad}.`}>
+  <div class="container page">
+    <header class="prose">
+      <p class="eyebrow">Contacto</p>
+      <h1>Si crees que encajo en tu equipo, escríbeme.</h1>
+      <p class="lead">{perfil.objetivo}</p>
+    </header>
+
+    <ul class="channels">
+      {
+        canales.map((c) => (
+          <li>
+            <a href={c.href} rel={c.href.startsWith('http') ? 'me noopener' : undefined}>
+              <span class="label">{c.nombre}</span>
+              <span class="value">{c.valor}</span>
+              <span class="note">{c.nota}</span>
+              <span class="go" aria-hidden="true">{c.href.startsWith('http') ? '↗' : '→'}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <p class="muted small meta">{perfil.ubicacion} · {perfil.disponibilidad} · {perfil.idiomas}</p>
+    {perfil.cv && <p><a class="btn" href={perfil.cv} download>Descargar CV (PDF)</a></p>}
+  </div>
+</Base>
+
+<style>
+  .channels { list-style: none; padding: 0; margin: var(--space-16) 0 var(--space-8); border-top: 1px solid var(--border-strong); }
+  .channels li { margin: 0; }
+  .channels a {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--space-1) var(--space-6);
+    align-items: center;
+    padding: var(--space-8) var(--space-3);
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    text-decoration: none;
+    transition: background-color 0.2s var(--ease);
+  }
+  @media (min-width: 52rem) { .channels a { grid-template-columns: 9rem minmax(0, 1.2fr) 1fr auto; } }
+  .channels a:hover { background: var(--surface); }
+  .channels .label { margin: 0; color: var(--accent); }
+  .value { font-family: var(--font-display); font-weight: 650; font-size: clamp(1.2rem, 0.9rem + 1.6vw, 2rem); letter-spacing: -0.025em; overflow-wrap: anywhere; grid-column: 1; }
+  .note { color: var(--text-muted); font-size: var(--fs-sm); grid-column: 1; }
+  .go { grid-column: 2; grid-row: 1 / span 3; font-family: var(--font-mono); font-size: 1.4rem; color: var(--accent); transition: transform 0.2s var(--ease); }
+  @media (min-width: 52rem) {
+    .value, .note { grid-column: auto; }
+    .go { grid-column: auto; grid-row: auto; }
+  }
+  .channels a:hover .go { transform: translate(3px, -3px); }
+  .meta { font-family: var(--font-mono); }
+</style>

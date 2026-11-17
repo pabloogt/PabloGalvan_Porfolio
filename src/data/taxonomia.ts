@@ -15,8 +15,9 @@ export const CATEGORIAS = {
 } as const;
 
 export const TIPOS = {
-  profesional: 'Experiencia profesional',
+  profesional: 'Proyecto profesional',
   personal: 'Proyecto personal',
+  academico: 'Proyecto académico',
   laboratorio: 'Laboratorio académico',
   investigacion: 'Investigación',
 } as const;

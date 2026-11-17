@@ -11,11 +11,18 @@ titulo: Título claro del proyecto
 resumen: Una o dos frases (máximo 260 caracteres) con qué es y qué se consiguió.
 area: ciberseguridad            # ciberseguridad | desarrollo
 categoria: blue-team            # ver src/data/taxonomia.ts
-tipo: laboratorio               # profesional | personal | laboratorio | investigacion
+tipo: laboratorio               # profesional | personal | academico | laboratorio | investigacion
 estado: A                       # A implementado y documentado · B evidencias parciales · C estudiado · D pendiente
 destacado: false                # true = aparece en la portada
 orden: 10                       # menor = antes dentro de su categoría
 fecha: Mayo 2026
+rol: Qué hice yo en el proyecto (una frase).
+web: https://ejemplo.com/              # solo si hay web pública
+repo: https://github.com/...           # solo si el repositorio es público y se puede compartir
+portada: ../../assets/portadas/mi-proyecto.png   # captura para la tarjeta destacada
+portadaAlt: Descripción de la captura.
+cifras:                                # alternativa a la portada: hasta 4 datos verificables
+  - { valor: "24", etiqueta: controles }
 contexto: Por qué se hizo.
 objetivo: Qué se quería conseguir.
 problema: Qué problema técnico aborda.
@@ -75,9 +82,13 @@ Los originales **nunca** se copian al proyecto. Se publica una copia saneada:
 4. Si el documento tenía un secreto concreto, añade su patrón a `BLOQUEADOS` en `scripts/check-secrets.mjs` para que nunca vuelva a colarse.
 5. Ejecuta `npm run verify`.
 
-## 4. Cambiar datos personales, formación o tecnologías
+## 4. Cambiar datos personales, experiencia, formación o tecnologías
 
 Todo está en `src/data/perfil.ts`. No pongas teléfono ni dirección: la web es pública.
+
+- **Experiencia:** describe solo tareas generales. Nada interno de las empresas ni trabajos sin autorización para mostrarse.
+- **CV:** copia el PDF actualizado (sin teléfono) a `public/cv/` y pon su ruta en `perfil.cv`. Con `null`, los botones de descarga no aparecen.
+- **Portadas:** captura de 1440 px de ancho, sin el banner de cookies, guardada en `src/assets/portadas/`.
 
 ## 5. Añadir una categoría o competencia
 
@@ -90,3 +101,11 @@ npm run verify
 ```
 
 Comprueba tipos y esquema, build, tests de contenido, enlaces internos y secretos. Revisa también `INVENTARIO_EVIDENCIAS.md` por si alguna ficha ha cambiado de estado.
+
+## 7. Si una página falla con «Cannot read properties of undefined»
+
+Suele ser la caché de contenido de Astro (`.astro/data-store.json`) con fichas procesadas con un esquema anterior, después de añadir un campo en `src/content.config.ts`.
+
+- `npm run dev` y `npm run build` ya la borran antes de arrancar (`scripts/clean-content-cache.mjs`). Si tienes el servidor abierto mientras cambias el esquema, **reinícialo**.
+- Los componentes no leen las listas directamente: `todos()` en `src/lib/proyectos.ts` las normaliza con `normalizar()` (`src/lib/tarjeta.ts`). Si añades un campo de tipo lista al esquema, añádelo también a `CAMPOS_LISTA`.
+- `npm run smoke` comprueba que las páginas clave del servidor en marcha responden sin errores.

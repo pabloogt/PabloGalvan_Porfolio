@@ -19,16 +19,37 @@ test('hay proyectos en las dos áreas', () => {
   assert.ok(proyectos.some((p) => p.data.area === 'desarrollo'));
 });
 
-test('los ocho proyectos prioritarios existen y están destacados', () => {
-  const prioritarios = ['snort-dmz', 'snort-deteccion-nmap', 'bastionado-ssh', 'wazuh-suricata-pfsense', 'auditoria-wifi', 'webtrustscan', 'pill-express'];
+test('los proyectos prioritarios existen y están destacados', () => {
+  const prioritarios = ['webtrustscan', 'piscinas-fama', 'termlifepicks', 'pill-express', 'siem-elk-snort', 'snort-dmz', 'snort-deteccion-nmap', 'wazuh-suricata-pfsense', 'auditoria-wifi'];
   for (const id of prioritarios) {
     const p = proyectos.find((x) => x.f === `${id}.md`);
     assert.ok(p, `falta ${id}`);
-    if (id !== 'bastionado-ssh') assert.equal(p.data.destacado, true, `${id} debería estar destacado`);
+    assert.equal(p.data.destacado, true, `${id} debería estar destacado`);
   }
-  // La auditoría Android sigue pendiente de documentación: debe existir y declararlo.
-  const android = proyectos.find((x) => x.f === 'android-jadx-mobsf.md');
-  assert.equal(android.data.estado, 'D');
+});
+
+test('no queda contenido de la financiación de Cüimo', () => {
+  assert.ok(!proyectos.some((p) => /cuimo|cüimo/i.test(p.f)), 'existe una ficha de Cüimo');
+  for (const p of proyectos) {
+    assert.ok(!/financiaci[oó]n/i.test(JSON.stringify(p.data) + p.body), `${p.f} menciona la financiación`);
+    assert.ok(!/cuimo\.com/i.test(JSON.stringify(p.data) + p.body), `${p.f} enlaza a cuimo.com`);
+  }
+  if (existsSync('dist')) {
+    assert.ok(!existsSync('dist/proyectos/cuimo-financiacion'), 'la ruta antigua sigue generándose');
+  }
+});
+
+test('los proyectos con web pública tienen portada, texto alternativo y papel', () => {
+  for (const p of proyectos.filter((x) => x.data.web)) {
+    assert.ok(p.data.portada && p.data.portadaAlt, `${p.f}: falta portada o su texto alternativo`);
+    assert.ok(p.data.rol, `${p.f}: falta indicar mi papel`);
+    assert.ok(existsSync(resolve(dirname(join(DIR, p.f)), p.data.portada)), `${p.f}: no existe la portada`);
+  }
+});
+
+test('se distinguen proyectos profesionales, personales y académicos', () => {
+  const tipos = new Set(proyectos.filter((p) => p.data.area === 'desarrollo').map((p) => p.data.tipo));
+  for (const t of ['profesional', 'personal', 'academico']) assert.ok(tipos.has(t), `no hay proyectos de tipo ${t}`);
 });
 
 test('todas las imágenes de evidencia existen', () => {

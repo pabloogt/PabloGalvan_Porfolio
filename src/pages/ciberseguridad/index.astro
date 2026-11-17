@@ -1,27 +1,54 @@
 ---
 import Base from '@/layouts/Base.astro';
 import AreaListing from '@/components/AreaListing.astro';
+import { ESTADOS } from '@/data/taxonomia';
 import { porArea } from '@/lib/proyectos';
 
 const proyectos = await porArea('ciberseguridad');
 ---
 
-<Base title="Ciberseguridad" description="Laboratorios de detección, monitorización, redes, hardening, auditoría web, seguridad móvil, análisis forense y criptografía, con evidencias y limitaciones documentadas.">
+<Base title="Laboratorios de ciberseguridad" description="Laboratorios de detección, monitorización, redes, hardening, auditoría web, seguridad móvil, análisis forense y gobierno, con evidencias y limitaciones documentadas.">
   <div class="container page">
-    <header class="prose">
-      <p class="eyebrow">Laboratorios e investigación</p>
-      <h1>Ciberseguridad</h1>
-      <p class="lead">
-        Trabajos realizados durante la especialización, agrupados por área. Cada ficha indica qué se implementó, cómo se comprobó y qué quedó sin demostrar.
-      </p>
-    </header>
+    <div class="intro">
+      <header class="prose">
+        <p class="eyebrow">Laboratorios académicos e investigación</p>
+        <h1>Ciberseguridad</h1>
+        <p class="lead">
+          Trabajos de la especialización, realizados en entornos de laboratorio propios. Cada ficha explica qué se montó, cómo se comprobó y qué quedó sin demostrar.
+        </p>
+      </header>
+      <aside class="legend" aria-labelledby="leyenda">
+        <p class="label" id="leyenda">Grado de evidencia</p>
+        <dl>
+          {
+            (Object.keys(ESTADOS) as (keyof typeof ESTADOS)[]).map((k) => (
+              <div>
+                <dt class={`st st-${k.toLowerCase()}`}>{k}</dt>
+                <dd>{ESTADOS[k].etiqueta}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </aside>
+    </div>
     <AreaListing proyectos={proyectos} />
-    <p class="muted small">
-      Los conocimientos estudiados sin un proyecto propio (forense cloud y de virtualización, gobierno y cumplimiento) están en <a href="/formacion/">Formación</a>.
+    <p class="muted small note">
+      Los contenidos estudiados sin un trabajo propio que mostrar están en <a href="/formacion/">Formación</a>.
     </p>
   </div>
 </Base>
 
 <style>
-  .page { padding-top: var(--space-12); }
+  .intro { display: grid; gap: var(--space-8); align-items: end; }
+  @media (min-width: 60rem) { .intro { grid-template-columns: 1fr 20rem; } }
+  .legend { border: 1px solid var(--border-strong); border-radius: var(--radius-lg); padding: var(--space-4) var(--space-6); }
+  .legend dl { margin: 0; display: grid; gap: var(--space-2); }
+  .legend dl > div { display: grid; grid-template-columns: 1.75rem 1fr; gap: var(--space-3); align-items: center; }
+  .legend dd { margin: 0; font-size: var(--fs-sm); }
+  .st { display: grid; place-items: center; width: 1.75rem; height: 1.75rem; border-radius: 3px; font-family: var(--font-mono); font-size: 0.8rem; font-weight: 600; }
+  .st-a { color: var(--st-a); background: var(--st-a-bg); }
+  .st-b { color: var(--st-b); background: var(--st-b-bg); }
+  .st-c { color: var(--st-c); background: var(--st-c-bg); }
+  .st-d { color: var(--st-d); background: var(--st-d-bg); }
+  .note { margin-top: var(--space-12); }
 </style>

@@ -1,12 +1,18 @@
 ---
-titulo: Pill-Express — reparto de productos farmacéuticos (TFG DAM)
+titulo: Pill-Express — reparto de productos de farmacia
 resumen: Aplicación web en Java y Spring Boot para la venta y entrega a domicilio de productos de farmacia, con gestión de productos, pedidos, almacenes, usuarios y repartidores, autenticación con Spring Security y mapas de Google Maps.
 area: desarrollo
 categoria: desarrollo-software
-tipo: laboratorio
+tipo: academico
 estado: A
 destacado: true
-orden: 2
+orden: 4
+rol: Desarrollo en pareja de la aplicación completa, del modelo de datos a las vistas.
+repo: https://github.com/pabloogt/TFG_DAM
+cifras:
+  - { valor: "9", etiqueta: controladores MVC }
+  - { valor: "7", etiqueta: servicios con JPA }
+  - { valor: "3", etiqueta: "capas: web, servicio y datos" }
 fecha: Proyecto final de DAM
 contexto: Proyecto final del ciclo de Desarrollo de Aplicaciones Multiplataforma, realizado en pareja. La idea toma como referencia las plataformas de reparto a domicilio, aplicada a farmacias.
 objetivo: Construir una aplicación completa con administración, venta online y seguimiento de entregas.

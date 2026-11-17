@@ -1,0 +1,76 @@
+---
+import Base from '@/layouts/Base.astro';
+import { experiencia, formacion } from '@/data/perfil';
+---
+
+<Base title="Experiencia" description="Prácticas de desarrollo web en Cüimo (React y TypeScript) y en Atisa (aplicación CRUD e inteligencia artificial), y formación en DAW, DAM y ciberseguridad.">
+  <div class="container page">
+    <header class="prose">
+      <p class="eyebrow">Trayectoria</p>
+      <h1>Experiencia</h1>
+      <p class="lead">
+        Dos periodos de prácticas en equipos de desarrollo. Describo las tareas de forma general: el trabajo es de cada empresa y no lo muestro aquí.
+      </p>
+    </header>
+
+    <ol class="timeline">
+      {
+        experiencia.map((e) => (
+          <li>
+            <div class="when">
+              <p class="label">{e.periodo}</p>
+            </div>
+            <div class="what">
+              <h2>{e.empresa}</h2>
+              <p class="role">{e.puesto}</p>
+              <ul>{e.tareas.map((t) => <li>{t}</li>)}</ul>
+              <ul class="tags" aria-label="Tecnologías">{e.tecnologias.map((t) => <li><span class="tag">{t}</span></li>)}</ul>
+              {e.nota && <p class="muted small nota">{e.nota}</p>}
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+
+    <section aria-labelledby="form">
+      <div class="section-head">
+        <span class="num">+</span>
+        <h2 id="form">Formación</h2>
+        <a class="more link-arrow" href="/formacion/">Contenidos y evaluaciones</a>
+      </div>
+      <ul class="edu">
+        {
+          formacion.map((f) => (
+            <li>
+              <p class="label">{f.centro} · {f.periodo}</p>
+              <h3>{f.titulo}</h3>
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <aside class="next">
+      <p class="big">Además de las prácticas, he publicado proyectos web por mi cuenta.</p>
+      <a class="btn btn-primary" href="/proyectos/">Ver proyectos <span class="arrow" aria-hidden="true">→</span></a>
+    </aside>
+  </div>
+</Base>
+
+<style>
+  .timeline { list-style: none; padding: 0; margin: var(--space-16) 0; border-top: 1px solid var(--border-strong); }
+  .timeline > li { display: grid; gap: var(--space-2) var(--space-12); padding: var(--space-12) 0; border-bottom: 1px solid var(--border); margin: 0; }
+  @media (min-width: 52rem) { .timeline > li { grid-template-columns: 14rem minmax(0, 1fr); } }
+  .when .label { color: var(--accent); margin: 0.6rem 0 0; }
+  .what h2 { margin: 0 0 var(--space-1); }
+  .role { font-size: var(--fs-lg); color: var(--text-muted); margin-bottom: var(--space-6); }
+  .what > ul:not(.tags) { max-width: var(--max-text); margin-bottom: var(--space-6); }
+  .what > ul:not(.tags) li + li { margin-top: var(--space-2); }
+  .nota { margin: var(--space-4) 0 0; }
+  .edu { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-8); }
+  @media (min-width: 52rem) { .edu { grid-template-columns: repeat(3, 1fr); } }
+  .edu li { margin: 0; }
+  .edu h3 { margin: 0; font-size: 1.15rem; }
+  .next { margin-top: var(--space-16); padding: var(--space-8); border: 1px solid var(--border-strong); border-radius: var(--radius-lg); }
+  .big { font-family: var(--font-display); font-weight: 650; font-size: var(--fs-xl); letter-spacing: -0.025em; line-height: 1.15; max-width: 32rem; }
+</style>

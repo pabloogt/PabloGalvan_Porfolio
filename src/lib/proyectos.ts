@@ -1,5 +1,6 @@
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { CATEGORIAS } from '@/data/taxonomia';
+import { normalizar } from './tarjeta';
 
 export type Proyecto = CollectionEntry<'proyectos'>;
 export type Categoria = keyof typeof CATEGORIAS;
@@ -15,8 +16,13 @@ export function ordenar(a: Proyecto, b: Proyecto): number {
   );
 }
 
+/**
+ * Todas las fichas, ordenadas y con sus listas garantizadas.
+ * `normalizar` protege frente a entradas de la caché de contenido procesadas con un esquema anterior.
+ */
 export async function todos(): Promise<Proyecto[]> {
-  return (await getCollection('proyectos')).sort(ordenar);
+  const entradas = await getCollection('proyectos');
+  return entradas.map((p) => ({ ...p, data: normalizar(p.data) })).sort(ordenar);
 }
 
 export async function porArea(area: Proyecto['data']['area']): Promise<Proyecto[]> {

@@ -5,20 +5,26 @@
   "private": true,
   "description": "Portfolio técnico de Pablo Galván Tejada: ciberseguridad, sistemas, redes y desarrollo.",
   "scripts": {
+    "predev": "node scripts/clean-content-cache.mjs",
     "dev": "astro dev",
+    "prebuild": "node scripts/clean-content-cache.mjs",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "check": "astro check",
     "test": "node --test \"tests/**/*.test.mjs\"",
     "test:links": "node scripts/check-links.mjs",
     "test:secrets": "node scripts/check-secrets.mjs",
-    "verify": "npm run build && npm test && npm run test:links && npm run test:secrets"
+    "verify": "npm run build && npm test && npm run test:links && npm run test:secrets",
+    "smoke": "node scripts/smoke.mjs"
   },
   "engines": {
     "node": ">=22.23.4"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.7.5",
+    "@fontsource-variable/bricolage-grotesque": "^5.3.0",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
     "astro": "^7.4.12",
     "sharp": "^0.35.5"
   },
