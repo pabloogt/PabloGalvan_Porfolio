@@ -10,7 +10,7 @@ const lista = await todos();
 const dev = lista.filter((p) => p.data.area === 'desarrollo' && p.data.destacado);
 const [principal, ...resto] = dev;
 const labs = lista.filter((p) => p.data.area === 'ciberseguridad' && p.data.destacado).slice(0, 5);
-const totalLabs = lista.filter((p) => p.data.area === 'ciberseguridad' && p.data.estado !== 'D').length;
+const totalLabs = lista.filter((p) => p.data.area === 'ciberseguridad').length;
 ---
 
 <Base title={perfil.nombre} description={perfil.descripcion}>

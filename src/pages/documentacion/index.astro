@@ -10,7 +10,7 @@ const diagramas = lista.flatMap((p) => p.data.evidencias.filter((e) => e.tipo !=
 const capturas = lista
   .map((p) => ({ proyecto: p, n: p.data.evidencias.filter((e) => e.tipo === 'captura').length }))
   .filter((x) => x.n > 0);
-const pendientes = lista.filter((p) => p.data.pendiente.length > 0);
+const pendientes = lista.filter((p) => p.data.estado === 'C' && p.data.pendiente.length > 0);
 ---
 
 <Base title="Documentación técnica" description="Informes técnicos saneados, diagramas, evidencias y estado de la documentación de cada proyecto del portfolio.">
@@ -69,6 +69,7 @@ const pendientes = lista.filter((p) => p.data.pendiente.length > 0);
       </ul>
     </section>
 
+    {pendientes.length > 0 && (
     <section aria-labelledby="pend">
       <h2 id="pend">Documentación pendiente de recuperar</h2>
       <p class="muted">Lo que falta para completar cada ficha. Se mantiene a la vista a propósito.</p>
@@ -83,6 +84,7 @@ const pendientes = lista.filter((p) => p.data.pendiente.length > 0);
         }
       </ul>
     </section>
+    )}
   </div>
 </Base>
 

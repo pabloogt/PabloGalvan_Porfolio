@@ -27,8 +27,6 @@
   --st-b-bg: #f4e3bf;
   --st-c: #3d4470;
   --st-c-bg: #dfe0ee;
-  --st-d: #5c5449;
-  --st-d-bg: #e6dfd2;
 
   /* Tipografía */
   --font-display: 'Bricolage Grotesque Variable', 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
@@ -83,8 +81,6 @@
     --st-b-bg: #3a2c12;
     --st-c: #b9bff0;
     --st-c-bg: #272a45;
-    --st-d: #c5baa8;
-    --st-d-bg: #2d2821;
   }
 }
 

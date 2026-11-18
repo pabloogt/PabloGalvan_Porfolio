@@ -55,7 +55,7 @@ test('una ficha de la caché con un esquema anterior (sin listas) se normaliza s
 
 test('el emblema usa solo el nombre del proyecto', () => {
   assert.equal(nombreCorto('TCG Radar — monitor privado de productos'), 'TCG Radar');
-  assert.equal(nombreCorto('Simulador de operaciones bancarias en COBOL'), 'Simulador de operaciones bancarias en COBOL');
+  assert.equal(nombreCorto('Revisión de código desde el punto de vista de la seguridad'), 'Revisión de código desde el punto de vista de la seguridad');
   assert.equal(iniciales('TCG Radar — monitor privado'), 'TR');
   assert.equal(iniciales('WebTrustScan — análisis externo'), 'WT');
   assert.equal(iniciales('Papelo'), 'PA');

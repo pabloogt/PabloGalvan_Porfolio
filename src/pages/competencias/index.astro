@@ -3,7 +3,7 @@ import Base from '@/layouts/Base.astro';
 import { COMPETENCIAS } from '@/data/taxonomia';
 import { todos, urlProyecto } from '@/lib/proyectos';
 
-const lista = (await todos()).filter((p) => p.data.estado !== 'D');
+const lista = await todos();
 const filas = (Object.keys(COMPETENCIAS) as (keyof typeof COMPETENCIAS)[])
   .map((c) => ({ id: c, nombre: COMPETENCIAS[c], proyectos: lista.filter((p) => p.data.competencias.includes(c)) }))
   .filter((f) => f.proyectos.length > 0);

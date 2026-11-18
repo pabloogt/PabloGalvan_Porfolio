@@ -5,7 +5,7 @@ import { normalizar } from './tarjeta';
 export type Proyecto = CollectionEntry<'proyectos'>;
 export type Categoria = keyof typeof CATEGORIAS;
 
-const pesoEstado = { A: 0, B: 1, C: 2, D: 3 } as const;
+const pesoEstado = { A: 0, B: 1, C: 2 } as const;
 
 /** Orden estable: orden manual, después estado de evidencia, después título. */
 export function ordenar(a: Proyecto, b: Proyecto): number {

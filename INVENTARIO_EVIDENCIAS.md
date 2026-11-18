@@ -2,7 +2,7 @@
 
 Actualizado el 16/11/2026 con las carpetas `ESCIB/Bastionado`, `Incidentes`, `HE` y `PPS`. Los originales permanecen fuera del proyecto; en `public/` solo hay copias saneadas.
 
-Clasificación: **A** implementado y documentado · **B** implementado, evidencias parciales · **C** estudiado o preparado · **D** pendiente de recuperar.
+Clasificación: **A** implementado y documentado · **B** implementado, evidencias parciales · **C** estudiado o preparado · **D** (pendiente) se retiró el 18/11/2026: ver al final.
 
 ## Ciberseguridad
 
@@ -103,3 +103,13 @@ Clasificación: **A** implementado y documentado · **B** implementado, evidenci
 | `src/assets/portadas/piscinasfama.png`, `termlifepicks.png` | Capturas propias de las webs públicas, recortadas sin el banner de cookies. |
 | `public/og.png` | Captura del inicio del propio portfolio. |
 | `public/favicon.svg`, `src/components/Logo.astro` | Monograma PG, diseño propio. |
+
+## Cambios del 18/11/2026: retirada de la categoría D
+
+| Ficha | Antes | Ahora | Fuente usada |
+|---|---|---|---|
+| `android-jadx-mobsf` | D | C | README del repositorio de InsecureBankv2 (lista de debilidades declaradas). La ficha no presenta hallazgos propios. |
+| `dns-cdn-cloudflare` | D | C | Documentación oficial de Cloudflare: «Proxy status» y «Exposed IP addresses». |
+| `simulador-bancario-cobol` | D | Eliminada | No hay código en el equipo y un proyecto propio no se puede documentar con fuentes externas. |
+
+Las fichas A y B conservan sus notas `pendiente` en el frontmatter como recordatorio interno, pero ya no se publican ni en la ficha ni en Documentación. Solo las fichas C las muestran.

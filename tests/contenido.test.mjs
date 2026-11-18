@@ -39,10 +39,14 @@ test('no queda contenido de la financiación de Cüimo', () => {
   }
 });
 
-test('los proyectos con web pública tienen portada, texto alternativo y papel', () => {
+test('los proyectos con web pública indican mi papel y tienen portada o cifras', () => {
   for (const p of proyectos.filter((x) => x.data.web)) {
-    assert.ok(p.data.portada && p.data.portadaAlt, `${p.f}: falta portada o su texto alternativo`);
     assert.ok(p.data.rol, `${p.f}: falta indicar mi papel`);
+    assert.ok(p.data.portada || (p.data.cifras ?? []).length > 0, `${p.f}: necesita portada o cifras para la tarjeta`);
+  }
+  // Toda portada debe existir y llevar texto alternativo.
+  for (const p of proyectos.filter((x) => x.data.portada)) {
+    assert.ok(p.data.portadaAlt, `${p.f}: falta el texto alternativo de la portada`);
     assert.ok(existsSync(resolve(dirname(join(DIR, p.f)), p.data.portada)), `${p.f}: no existe la portada`);
   }
 });
@@ -70,10 +74,33 @@ test('todos los documentos enlazados existen en public/', () => {
   }
 });
 
-test('las fichas pendientes (D) declaran qué falta y no inventan resultados', () => {
-  for (const p of proyectos.filter((x) => x.data.estado === 'D')) {
-    assert.ok((p.data.pendiente ?? []).length > 0, `${p.f}: debe indicar qué falta`);
-    assert.equal((p.data.resultados ?? []).length, 0, `${p.f}: una ficha D no debe tener resultados`);
+test('no quedan fichas en categoría D y todas usan A, B o C', () => {
+  for (const p of proyectos) assert.ok(['A', 'B', 'C'].includes(p.data.estado), `${p.f}: estado ${p.data.estado}`);
+});
+
+test('las fichas antes pendientes se documentan como C o se han eliminado', () => {
+  for (const id of ['android-jadx-mobsf', 'dns-cdn-cloudflare']) {
+    const p = proyectos.find((x) => x.f === `${id}.md`);
+    assert.ok(p, `falta ${id}`);
+    assert.equal(p.data.estado, 'C');
+    assert.ok((p.data.enlaces ?? []).length > 0, `${id}: debe citar las fuentes públicas usadas`);
+    assert.equal((p.data.pendiente ?? []).length, 0, `${id}: no debe mostrar pendientes`);
+  }
+  assert.ok(!proyectos.some((p) => p.f === 'simulador-bancario-cobol.md'), 'el simulador COBOL no se pudo documentar y debía eliminarse');
+});
+
+test('las fichas A y B no publican «Falta por recuperar»', () => {
+  const ficha = readFileSync('src/pages/proyectos/[...slug].astro', 'utf8');
+  assert.match(ficha, /d\.estado === 'C' \? d\.pendiente : \[\]/);
+  if (existsSync('dist')) {
+    for (const p of proyectos.filter((x) => x.data.estado !== 'C')) {
+      const html = readFileSync(`dist/proyectos/${p.f.replace(/\.md$/, '')}/index.html`, 'utf8');
+      assert.ok(!/Falta por recuperar|Ficha incompleta/.test(html), `${p.f} muestra el aviso de pendientes`);
+    }
+    const doc = readFileSync('dist/documentacion/index.html', 'utf8');
+    for (const p of proyectos.filter((x) => x.data.estado !== 'C')) {
+      assert.ok(!(p.data.pendiente ?? []).some((x) => doc.includes(x)), `${p.f}: sus pendientes aparecen en Documentación`);
+    }
   }
 });
 

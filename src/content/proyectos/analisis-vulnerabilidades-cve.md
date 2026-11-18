@@ -20,14 +20,12 @@ decisiones:
   - "Limitarse a técnicas pasivas y no intrusivas, como pedía el enunciado."
 limitaciones:
   - "Es un caso ficticio: no se escaneó ni explotó ningún sistema. Por eso se clasifica como trabajo estudiado (C) y no como implementación."
-  - "La práctica de Nmap y OpenVAS/GVM tiene su propio informe, pendiente de revisar antes de añadirlo."
+  - "La práctica de Nmap y OpenVAS/GVM está documentada en su propia ficha."
 recomendaciones:
   - "Actualizar Apache a una versión corregida, PHP a una versión con soporte y WordPress con sus plugins."
   - "Proteger o retirar /backup/ y /test/, añadir MFA y bloqueo por intentos al panel /admin/."
   - "Forzar HTTPS con HSTS y renovación automática de certificados."
 competencias: [vulnerabilidades, metodologia, documentacion]
-pendiente:
-  - Revisar el informe propio de Nmap y OpenVAS (HA_Nmap_OpenVAS) y comprobar qué resultados son de escaneos reales.
 ---
 
 ### CVE-2021-41773 en una frase

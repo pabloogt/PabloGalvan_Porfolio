@@ -27,7 +27,6 @@ export const ESTADOS = {
   A: { etiqueta: 'Implementado y documentado', descripcion: 'Existe documentación propia con procedimiento y capturas que respaldan el resultado.' },
   B: { etiqueta: 'Implementado, evidencias parciales', descripcion: 'Se implementó, pero alguna parte del resultado no queda demostrada en la documentación.' },
   C: { etiqueta: 'Estudiado o preparado', descripcion: 'Conocimiento trabajado en formación; no hay una implementación propia documentada.' },
-  D: { etiqueta: 'Pendiente de documentación', descripcion: 'El trabajo existe, pero la documentación original no se ha recuperado todavía.' },
 } as const;
 
 export const COMPETENCIAS = {

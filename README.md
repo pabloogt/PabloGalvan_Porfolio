@@ -42,7 +42,7 @@ src/
   content.config.ts        Esquema de las fichas (qué campos existen y cuáles son obligatorios)
   content/proyectos/*.md   Una ficha por proyecto; el nombre del fichero es la URL
   data/perfil.ts           Datos personales, experiencia, formación, evaluaciones y tecnologías
-  data/taxonomia.ts        Categorías, tipos, estados A–D y competencias
+  data/taxonomia.ts        Categorías, tipos, estados A–C y competencias
   assets/evidencias/       Capturas saneadas, una carpeta por proyecto
   assets/diagramas/        Diagramas reconstruidos (SVG)
   assets/portadas/         Capturas de portada de los proyectos con web pública

@@ -12,7 +12,7 @@ resumen: Una o dos frases (máximo 260 caracteres) con qué es y qué se consigu
 area: ciberseguridad            # ciberseguridad | desarrollo
 categoria: blue-team            # ver src/data/taxonomia.ts
 tipo: laboratorio               # profesional | personal | academico | laboratorio | investigacion
-estado: A                       # A implementado y documentado · B evidencias parciales · C estudiado · D pendiente
+estado: A                       # A implementado y documentado · B evidencias parciales · C estudiado
 destacado: false                # true = aparece en la portada
 orden: 10                       # menor = antes dentro de su categoría
 fecha: Mayo 2026
@@ -53,7 +53,7 @@ documentos:
 enlaces:
   - texto: Repositorio
     href: https://github.com/...
-pendiente:
+pendiente:                             # nota interna; no se publica en fichas B
   - "Lo que falta por recuperar."
 ---
 

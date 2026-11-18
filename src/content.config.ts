@@ -24,7 +24,7 @@ const proyectos = defineCollection({
       area: z.enum(AREAS),
       categoria: z.enum(claves(CATEGORIAS)),
       tipo: z.enum(claves(TIPOS)),
-      estado: z.enum(['A', 'B', 'C', 'D']),
+      estado: z.enum(['A', 'B', 'C']),
       destacado: z.boolean().default(false),
       /** Orden dentro de su categoría (menor = antes). */
       orden: z.number().default(100),
@@ -82,7 +82,7 @@ const proyectos = defineCollection({
         )
         .default([]),
       enlaces: z.array(z.object({ texto: z.string(), href: z.url() })).default([]),
-      /** Qué falta para completar la ficha (se muestra como aviso). */
+      /** Notas internas de lo que falta. Solo se muestran en fichas C; nunca en las B. */
       pendiente: z.array(z.string()).default([]),
     }),
 });

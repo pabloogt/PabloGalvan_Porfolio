@@ -19,6 +19,8 @@ const { proyecto } = Astro.props;
 const d = proyecto.data;
 const { Content } = await render(proyecto);
 const hayProcedimiento = proyecto.body?.trim().length;
+// Solo las fichas C (trabajo estudiado) muestran lo que falta; en A y B las notas quedan como recordatorio interno.
+const pendientePublico = d.estado === 'C' ? d.pendiente : [];
 const tituloCuerpo = d.area === 'desarrollo' ? 'En detalle' : 'Procedimiento';
 const diagramas = d.evidencias.filter((e) => e.tipo === 'diagrama');
 const capturas = d.evidencias.filter((e) => e.tipo !== 'diagrama');
@@ -79,10 +81,10 @@ const indice = [
     }
 
     {
-      d.pendiente.length > 0 && (
+      pendientePublico.length > 0 && (
         <aside class="aviso" aria-label="Documentación pendiente">
           <strong>Ficha incompleta.</strong> Falta por recuperar:
-          <ul>{d.pendiente.map((p) => <li>{p}</li>)}</ul>
+          <ul>{pendientePublico.map((p) => <li>{p}</li>)}</ul>
         </aside>
       )
     }
